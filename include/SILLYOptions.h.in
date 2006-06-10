@@ -1,9 +1,9 @@
 /***********************************************************************
-    filename:   SILLYImage.cpp
-    created:    10 Jun 2006
-    author:     Olivier Delannoy 
+    filename:   SILLYOptions.h.in
+    created:    2006/06/10
+    author:     Olivier Delannoy
 
-    purpose:    Implementation of the Image class  
+    purpose:    Store options of the SILLY library  
 *************************************************************************/
 /***************************************************************************
  *   Copyright (C) 2004 - 2006 Paul D Turner & The CEGUI Development Team
@@ -27,37 +27,12 @@
  *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  *   OTHER DEALINGS IN THE SOFTWARE.
  ***************************************************************************/
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+/* Defined to 1 if inline is enabled */ 
+#undef SILLY_OPT_INLINE 
 
-#include "SILLYImage.h"
+/* Defined to 1 if debug is enabled */ 
+#undef SILLY_OPT_DEBUG 
 
-#ifndef SILLY_OPT_INLINE
-#define inline 
-#include "SILLYImage.icpp"
-#undef inline
-#endif 
-#include "SILLYImageLoader.h"
-#include "SILLYImageLoaderManager.h" 
-#include "SILLYImageContext.h" 
+/* Defined to 1 if profile is enabled */ 
+#undef SILLY_OPT_PROFILE
 
-
-// Start section of namespace SILLY
-namespace SILLY
-{
-
-Image::Image(DataSource& source)
-    : d_imageContext(0), d_imageLoader(0), d_data(&source)
-{
-    ImageLoaderList::iterator iter = ImageLoaderManager::getSingleton().begin();
-    for (; ! d_imageLoader && iter != ImageLoaderManager::getSingleton().end() ; ++iter)
-    {
-        d_imageContext = (*iter)->parseHeader(d_imageHeader, d_data);
-        if (d_imageContext)
-            d_imageLoader = (*iter);
-    }
-    assert((! d_imageLoader || d_imageContext) && "ASSERT: Internal state of image invalid");
-}
-
-} // End section of namespace SILLY 

@@ -35,6 +35,8 @@
 namespace SILLY
 {
 class DataSource; 		// Forward declaration
+class ImageContext;     // Forward declaration
+ 
 /*! 
   \brief
     This is an abstract class that define the interface of all image loader 

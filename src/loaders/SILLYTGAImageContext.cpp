@@ -1,9 +1,9 @@
 /***********************************************************************
-    filename:   SILLYImage.cpp
-    created:    10 Jun 2006
+    filename:   SILLYTGAImageContext.cpp
+    created:    11 Jun 2006
     author:     Olivier Delannoy 
 
-    purpose:    Implementation of the Image class  
+    purpose:    Definition of the TGAImageContext methods  
 *************************************************************************/
 /***************************************************************************
  *   Copyright (C) 2004 - 2006 Paul D Turner & The CEGUI Development Team
@@ -31,33 +31,17 @@
 #include <config.h>
 #endif
 
-#include "SILLYImage.h"
+#include "loaders/SILLYTGAImageContext.h"
 
 #ifndef SILLY_OPT_INLINE
 #define inline 
-#include "SILLYImage.icpp"
+#include "loaders/SILLYTGAImageContext.icpp"
 #undef inline
 #endif 
-#include "SILLYImageLoader.h"
-#include "SILLYImageLoaderManager.h" 
-#include "SILLYImageContext.h" 
-
-
 // Start section of namespace SILLY
 namespace SILLY
 {
 
-Image::Image(DataSource& source)
-    : d_imageContext(0), d_imageLoader(0), d_data(&source)
-{
-    ImageLoaderList::iterator iter = ImageLoaderManager::getSingleton().begin();
-    for (; ! d_imageLoader && iter != ImageLoaderManager::getSingleton().end() ; ++iter)
-    {
-        d_imageContext = (*iter)->parseHeader(d_imageHeader, d_data);
-        if (d_imageContext)
-            d_imageLoader = (*iter);
-    }
-    assert((! d_imageLoader || d_imageContext) && "ASSERT: Internal state of image invalid");
-}
+ 
 
 } // End section of namespace SILLY 

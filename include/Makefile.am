@@ -25,9 +25,15 @@ endif
 
 noinst_HEADERS = \
   loaders/SILLYTGAImageContext.h \
+  loaders/SILLYTGAImageContext.icpp \
   loaders/SILLYTGAImageLoader.h \
+  loaders/SILLYTGAImageLoader.icpp \
   loaders/SILLYJPGImageContext.h \
+  loaders/SILLYJPGImageContext.icpp \
   loaders/SILLYJPGImageLoader.h \
+  loaders/SILLYJPGImageLoader.icpp \
   loaders/SILLYPNGImageContext.h \
-  loaders/SILLYPNGImageLoader.h 
+  loaders/SILLYPNGImageContext.icpp \
+  loaders/SILLYPNGImageLoader.h \
+  loaders/SILLYPNGImageLoader.icpp 
 

@@ -37,6 +37,13 @@
 #define inline 
 #include "SILLYImageHeader.icpp"
 #undef inline
+#endif 
 
+// Start SILLY namespace section 
+namespace SILLY
+{
+  
+} // End of SILLY namespace section 
+ 
  
 

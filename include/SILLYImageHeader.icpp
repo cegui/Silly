@@ -32,7 +32,7 @@
 namespace SILLY
 {
 inline ImageHeader::ImageHeader()
-  : d_width(0), d_height(0), d_PixelFormat(PF_ORIGIN)
+  : d_width(0), d_height(0), d_pixelFormat(PF_ORIGIN)
 {
 }
 
@@ -57,7 +57,7 @@ inline size_t ImageHeader::getHeight() const
     return d_height;
 }
 
-inline void ImageHeader::setHeight(size_t height) const
+inline void ImageHeader::setHeight(size_t height)
 {
     d_height = height;
 }

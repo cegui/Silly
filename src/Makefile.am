@@ -8,7 +8,6 @@ libsilly_la_SOURCES= \
   SILLYDataSource.cpp \
   SILLYMemoryDataSource.cpp \
   SILLYImageLoader.cpp \
-  SILLYTGAImageLoader.cpp \
   SILLYImageLoaderManager.cpp \
   SILLYImage.cpp \
   loaders/SILLYTGAImageLoader.cpp \

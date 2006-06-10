@@ -1,9 +1,9 @@
 /***********************************************************************
-    filename:   SILLYImage.cpp
-    created:    10 Jun 2006
-    author:     Olivier Delannoy 
+    filename:   SILLYPNGImageContext.h
+    created:    11 Jun 2006
+    author:     Olivier Delannoy
 
-    purpose:    Implementation of the Image class  
+    purpose:    Declaration of the PNGImageContext class 
 *************************************************************************/
 /***************************************************************************
  *   Copyright (C) 2004 - 2006 Paul D Turner & The CEGUI Development Team
@@ -27,37 +27,33 @@
  *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  *   OTHER DEALINGS IN THE SOFTWARE.
  ***************************************************************************/
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include "SILLYImage.h"
-
-#ifndef SILLY_OPT_INLINE
-#define inline 
-#include "SILLYImage.icpp"
-#undef inline
-#endif 
-#include "SILLYImageLoader.h"
-#include "SILLYImageLoaderManager.h" 
+#ifndef _SILLYPNGImageContext_h_ 
+#define _SILLYPNGImageContext_h_
+#include "SILLYBase.h" 
 #include "SILLYImageContext.h" 
-
-
-// Start section of namespace SILLY
+// Start of section namespace SILLY 
 namespace SILLY
 {
 
-Image::Image(DataSource& source)
-    : d_imageContext(0), d_imageLoader(0), d_data(&source)
+/*! 
+  \brief
+    Image Context for PNG Image Loader
+*/
+  
+  class SILLY_EXPORT PNGImageContext : public ImageContext 
 {
-    ImageLoaderList::iterator iter = ImageLoaderManager::getSingleton().begin();
-    for (; ! d_imageLoader && iter != ImageLoaderManager::getSingleton().end() ; ++iter)
-    {
-        d_imageContext = (*iter)->parseHeader(d_imageHeader, d_data);
-        if (d_imageContext)
-            d_imageLoader = (*iter);
-    }
-    assert((! d_imageLoader || d_imageContext) && "ASSERT: Internal state of image invalid");
-}
+public:
+        
+private:
 
-} // End section of namespace SILLY 
+};
+  
+  
+} // End of section namespace SILLY 
+
+// Inclue inline function when needed 
+#ifdef SILLY_OPT_INLINE
+#include "SILLYPNGImageContext.icpp"
+#endif 
+
+#endif // end of guard _SILLYPNGImageContext_h_

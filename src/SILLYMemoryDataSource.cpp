@@ -37,7 +37,12 @@
 #define inline 
 #include "SILLYMemoryDataSource.icpp"
 #undef inline
+#endif 
 
-
+// Start of SILLY namespace section 
+namespace SILLY
+{
+  
+} // End of SILLY namespace section 
  
 

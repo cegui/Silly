@@ -43,7 +43,7 @@ AC_DEFUN([SILLY_OPT], [
      CFLAGS="$CFLAGS -pg"
   fi
   AM_CONDITIONAL(SILLY_OPT_PROFILE, test "x$silly_with_opt_profile" = "xyes")
-  AC_MSG_RESULT($silly_with_opt_profile
+  AC_MSG_RESULT($silly_with_opt_profile)
 		
 ])
 
@@ -56,7 +56,15 @@ AC_DEFUN([SILLY_OPT_SUM], [
 
 AC_DEFUN([SILLY_JPG], [
   silly_with_jpg=no
-  
+  if test "x$silly_with_jpg" = "xyes"
+  then
+    AC_DEFINE_UNQUOTED([SILLY_HAVE_JPG], 
+                       [1], 
+                       [Defined to 1 if JPG support is enabled])
+  fi 
+  AM_CONDITIONAL(SILLY_HAVE_JPG, test "x$silly_with_jpg" = "xyes")
+  AC_SUBST(JPG_CFLAGS)
+  AC_SUBST(JPG_LIBS)
 ])
 
 AC_DEFUN([SILLY_JPG_SUM], [
@@ -65,7 +73,15 @@ AC_DEFUN([SILLY_JPG_SUM], [
 
 AC_DEFUN([SILLY_PNG], [
   silly_with_png=no
-
+  if test "x$silly_with_png" = "xyes"
+  then
+    AC_DEFINE_UNQUOTED([SILLY_HAVE_PNG], 
+                       [1], 
+                       [Defined to 1 if PNG support is enabled])
+  fi
+  AM_CONDITIONAL(SILLY_HAVE_PNG, test "x$silly_with_png" = "xyes")
+  AC_SUBST(PNG_CFLAGS)
+  AC_SUBST(PNG_LIBS)
 ])
 
 AC_DEFUN([SILLY_PNG_SUM], [
