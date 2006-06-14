@@ -45,7 +45,7 @@ class TGAImageLoader : public ImageLoader
 public:
   TGAImageLoader();
   ~TGAImageLoader();
-  TGAImageContext* parseHeader(ImageHeader& header, DataSource* data);
+  ImageContext* parseHeader(ImageHeader& header, DataSource* data);
   bool parsePixels(RawContainer& result, PixelFormat resultFormat, DataSource* data, ImageContext* context);
   void destroyContext(ImageContext* context);
  private:

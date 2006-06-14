@@ -34,7 +34,6 @@
 // Start of section namespace SILLY 
 namespace SILLY
 {
-class PNGImageContext;
   
 /*! 
   \brief
@@ -47,7 +46,7 @@ public:
   PNGImageLoader();
   ~PNGImageLoader();
   
-  PNGImageContext* parseHeader(ImageHeader& header, DataSource* data);
+  ImageContext* parseHeader(ImageHeader& header, DataSource* data);
 
   bool parsePixels(RawContainer& result, PixelFormat resultFormat, DataSource* data, ImageContext* context);
 

@@ -38,7 +38,7 @@ inline MemoryDataSource::MemoryDataSource(byte* data, size_t size)
     assert(size && "ASSERT: size is equal to 0");
 }
 
-inline const byte const* MemoryDataSource::getDataPtr() const
+inline const byte* MemoryDataSource::getDataPtr() const
 {
     return d_bytes;
 }

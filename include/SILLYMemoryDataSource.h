@@ -63,7 +63,7 @@ public:
     MemoryDataSource(byte* data, size_t size);
 
 
-    const byte const* getDataPtr() const;
+    const byte* getDataPtr() const;
 
     size_t getSize() const;
 private:

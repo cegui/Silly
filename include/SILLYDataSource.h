@@ -55,7 +55,7 @@ public:
     \brief 
     Get raw access to the image data 
   */
-  virtual const byte const* getDataPtr() const = 0;
+  virtual const byte * getDataPtr() const = 0;
   /*! 
     \brief 
     Retieve the byte at @em offset 
