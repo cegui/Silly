@@ -40,10 +40,13 @@ namespace SILLY
     Image Context for Targa image
 */
   
-class SILLY_EXPORT TGAImageContext : public ImageContext 
+class TGAImageContext : public ImageContext 
 {
 public:
-        
+  TGAImageContext();
+  
+  ~TGAImageContext();
+  
 private:
 
 };

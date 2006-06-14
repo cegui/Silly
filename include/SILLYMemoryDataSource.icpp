@@ -38,11 +38,9 @@ inline MemoryDataSource::MemoryDataSource(byte* data, size_t size)
     assert(size && "ASSERT: size is equal to 0");
 }
 
-
-inline byte MemoryDataSource::operator[] (size_t offset) const
+inline const byte const* MemoryDataSource::getDataPtr() const
 {
-    assert(d_size < offset && "ASSERT: offset invalid");
-    return d_bytes[offset];
+    return d_bytes;
 }
 
 inline size_t MemoryDataSource::getSize() const

@@ -34,21 +34,23 @@
 // Start of section namespace SILLY 
 namespace SILLY
 {
-
+class TGAImageContext;
 /*! 
   \brief
     Loader for Targa image 
 */
   
-class SILLY_EXPORT TGAImageLoader : public ImageLoader 
+class TGAImageLoader : public ImageLoader 
 {
 public:
-        
-private:
+  TGAImageLoader();
+  ~TGAImageLoader();
+  TGAImageContext* parseHeader(ImageHeader& header, DataSource* data);
+  bool parsePixels(RawContainer& result, PixelFormat resultFormat, DataSource* data, ImageContext* context);
+  void destroyContext(ImageContext* context);
+ private:
 
 };
-  
-  
 } // End of section namespace SILLY 
 
 // Inclue inline function when needed 

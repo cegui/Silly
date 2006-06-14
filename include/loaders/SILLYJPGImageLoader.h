@@ -34,18 +34,22 @@
 // Start of section namespace SILLY 
 namespace SILLY
 {
-
+class JPGImageContext;
+  
 /*! 
   \brief
     Loader class for JPG Image
 */
   
-class SILLY_EXPORT JPGImageLoader : public ImageLoader
+class JPGImageLoader : public ImageLoader
 {
 public:
-        
+  JPGImageLoader();
+  ~JPGImageLoader();
+  JPGImageContext* parseHeader(ImageHeader& header, DataSource* data);
+  bool parsePixels(RawContainer& result, PixelFormat resultFormat, DataSource* data, ImageContext* context);
+  void destroyContext(ImageContext* context);
 private:
-
 };
   
   

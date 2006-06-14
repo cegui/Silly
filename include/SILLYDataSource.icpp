@@ -31,10 +31,15 @@
 // Start of section namespace SILLY
 namespace SILLY
 {
-
 inline DataSource::~DataSource() 
 {
 }
-  
+
+inline byte DataSource::operator[](size_t offset) const
+{
+    assert(offset < getSize() && "ASSERT: Trying to access pixel outside of the data");
+    return getDataPtr()[offset];
+}
+
 } // End of section namespace SILLY
 

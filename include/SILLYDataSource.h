@@ -53,10 +53,15 @@ public:
   virtual ~DataSource();
   /*! 
     \brief 
+    Get raw access to the image data 
+  */
+  virtual const byte const* getDataPtr() const = 0;
+  /*! 
+    \brief 
     Retieve the byte at @em offset 
     
   */
-  virtual byte operator[] (size_t offset) const = 0;
+  byte operator[] (size_t offset) const;
   /*! 
     \brief 
     Return the size of the data 

@@ -62,7 +62,8 @@ public:
       
     MemoryDataSource(byte* data, size_t size);
 
-    byte operator[](size_t offset) const;
+
+    const byte const* getDataPtr() const;
 
     size_t getSize() const;
 private:

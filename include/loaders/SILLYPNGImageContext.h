@@ -43,7 +43,9 @@ namespace SILLY
   class SILLY_EXPORT PNGImageContext : public ImageContext 
 {
 public:
-        
+  PNGImageContext();
+  ~PNGImageContext();
+  
 private:
 
 };

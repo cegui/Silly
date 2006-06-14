@@ -40,10 +40,13 @@ namespace SILLY
     Image Context for JPG image loader
 */
   
-class SILLY_EXPORT JPGImageContext : public ImageContext
+class JPGImageContext : public ImageContext
 {
 public:
-        
+  JPGImageContext();
+  ~JPGImageContext();
+  
+
 private:
 
 };
