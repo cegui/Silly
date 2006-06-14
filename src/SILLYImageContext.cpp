@@ -37,6 +37,7 @@
 #define inline 
 #include "SILLYImageContext.icpp"
 #undef inline
+#endif
 
 // Start section of namespace SILLY
 namespace SILLY

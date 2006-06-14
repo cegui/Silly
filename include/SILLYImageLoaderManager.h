@@ -30,7 +30,6 @@
 #ifndef _SILLYImageLoaderManager_h_ 
 #define _SILLYImageLoaderManager_h_
 #include "SILLYBase.h" 
-#include <vector> 
 
 // Start of section namespace SILLY 
 namespace SILLY
@@ -41,11 +40,16 @@ class ImageLoader; // Forward declaration
   Typename for a collection of image loader
 */
 typedef std::vector<ImageLoader*> ImageLoaderList;
+
+#if defined(_MSC_VER)
+#   pragma warning(push)
+#   pragma warning(disable : 4251)
+#endif
+
 /*! 
   \brief
     Manage the list of all supported ImageLoader 
 */
-  
 class SILLY_EXPORT ImageLoaderManager
 {
     
@@ -92,7 +96,10 @@ private:
   ImageLoaderManager(ImageLoaderManager&);
   ImageLoaderManager& operator=(ImageLoaderManager&);
 };
-  
+
+#if defined(_MSC_VER)
+#   pragma warning(pop)
+#endif  
   
 } // End of section namespace SILLY 
 

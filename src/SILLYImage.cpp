@@ -39,8 +39,8 @@
 #undef inline
 #endif 
 #include "SILLYImageLoader.h"
-#include "SILLYImageLoaderManager.h" 
-#include "SILLYImageContext.h" 
+#include "SILLYImageLoaderManager.h"
+#include "SILLYImageContext.h"
 
 
 // Start section of namespace SILLY

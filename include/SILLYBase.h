@@ -29,14 +29,20 @@
  ***************************************************************************/
 #ifndef _SILLYBase_h_ 
 #define _SILLYBase_h_ 
-#include <vector> 
+#include <vector>
+#include <cassert>
 
 #undef SILLY_OPT_INLINE 
 
-#define SILLY_EXPORT 
-
-
-
+#if defined(_WIN32) || defined(__WIN32__)
+#   ifdef SILLY_EXPORTS
+#       define SILLY_EXPORT __declspec(dllexport)
+#   else
+#       define SILLY_EXPORT __declspec(dllimport)
+#   endif
+#else
+#   define SILLY_EXPORT
+#endif
 
 // Start of section namespace SILLY 
 namespace SILLY
