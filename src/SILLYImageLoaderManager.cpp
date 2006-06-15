@@ -58,7 +58,7 @@ ImageLoaderManager* ImageLoaderManager::d_instance = 0;
 
 ImageLoaderManager::ImageLoaderManager()
 {
-
+    d_instance = this;
     add(new TGAImageLoader);
 #ifdef SILLY_HAVE_JPG
     add(new JPGImageLoader);

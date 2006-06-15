@@ -33,7 +33,7 @@ namespace SILLY
 {
 
 inline ImageContext::ImageContext()
-    : d_pixels(0), d_length(0), d_currentOffset(0)
+    : d_pixels(0), d_length(0), d_currentOffset(0), d_format(PF_RGBA)
 {
 }
 
@@ -53,7 +53,7 @@ inline void ImageContext::setDestination(byte* pixels, size_t length, PixelForma
 
 inline void ImageContext::setNextPixel(byte red, byte green, byte bleu, byte alpha)
 {
-    assert(d_currentOffset < d_length && "ASSERT: try to set a pixel outside of the image");
+    //assert(d_currentOffset < d_length && "ASSERT: try to set a pixel outside of the image");
     switch(d_format)
     {
     case PF_BGR:

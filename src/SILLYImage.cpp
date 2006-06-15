@@ -48,7 +48,7 @@ namespace SILLY
 {
 
 Image::Image(DataSource& source)
-  : d_width(0), d_height(0), d_bpp(0), d_data(&source), d_imageContext(0), d_imageLoader(0)
+  : d_width(0), d_height(0), d_bpp(0), d_pixels(0), d_data(&source), d_imageContext(0), d_imageLoader(0)
 {
 }
 
@@ -69,6 +69,7 @@ bool Image::loadImageHeader()
 
 bool Image::loadImageData(PixelFormat resultFormat)
 {
+    d_pfResult = resultFormat;
     switch (resultFormat)
     {
     case PF_BGR:
@@ -109,6 +110,7 @@ bool Image::loadImageData(PixelFormat resultFormat)
 bool Image::allocate()
 {
     delete [] d_pixels;
+    printf("%d\n", d_bpp);
     d_pixels = new byte[d_bpp * d_width * d_height];
     return d_pixels != 0;
 }
