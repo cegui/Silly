@@ -3,7 +3,7 @@ dnl Author: Olivier Delannoy
 dnl Created: 2006-06-11
 
 dnl Consts 
-m4_define([pkg_name], [silly])
+m4_define([pkg_name], [SILLY])
 m4_define([pkg_prefix], [SILLY])
 m4_define([pkg_maintener], [Olivier Delannoy <Olivier.Delannoy@gmail.com>])
 m4_define([pkg_vers_major], [0])
@@ -49,8 +49,7 @@ SILLY_VERSION_INFO=$SILLY_CURRENT:$SILLY_REVISION:$SILLY_AGE
 AC_CONFIG_FILES([Makefile
 		 include/Makefile
 		 src/Makefile
-		 SILLY.pc
-		 SILLY.spec])
+		 SILLY.pc])
 AC_OUTPUT
 dnl summary 
 echo 

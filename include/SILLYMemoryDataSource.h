@@ -60,14 +60,14 @@ public:
       \param size the size of data 
     */
       
-    MemoryDataSource(byte* data, size_t size);
+    MemoryDataSource(const byte* data, size_t size);
 
 
     const byte* getDataPtr() const;
 
     size_t getSize() const;
 private:
-    byte* d_bytes;               //!< a pointer to the byte array
+    const byte* d_bytes;               //!< a pointer to the byte array
     size_t d_size;              //!< the size of the memory area
 };
   

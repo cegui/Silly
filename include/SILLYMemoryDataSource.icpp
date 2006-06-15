@@ -31,7 +31,7 @@
 // Start of section namespace SILLY
 namespace SILLY
 {
-inline MemoryDataSource::MemoryDataSource(byte* data, size_t size)
+inline MemoryDataSource::MemoryDataSource(const byte* data, size_t size)
     : d_bytes(data), d_size(size)
 {
     assert(data && "ASSERT: data point to an invalid memory");

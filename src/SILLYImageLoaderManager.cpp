@@ -58,7 +58,7 @@ ImageLoaderManager* ImageLoaderManager::d_instance = 0;
 
 ImageLoaderManager::ImageLoaderManager()
 {
-/*
+
     add(new TGAImageLoader);
 #ifdef SILLY_HAVE_JPG
     add(new JPGImageLoader);
@@ -67,7 +67,7 @@ ImageLoaderManager::ImageLoaderManager()
     add(new PNGImageLoader);
 #endif 
 // Add other builtins loader here 
-*/
+
 }
 
 ImageLoaderManager::~ImageLoaderManager()
@@ -76,6 +76,18 @@ ImageLoaderManager::~ImageLoaderManager()
     {
         delete (*iter);
     }
+}
+
+bool SILLYInit()
+{
+    if (new ImageLoaderManager)
+        return true;
+    return false;
+}
+
+void SILLYCleanup()
+{
+    delete ImageLoaderManager::getSingletonPtr();
 }
 
 } // End of SILLY namespace section 

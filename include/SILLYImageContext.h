@@ -68,11 +68,14 @@ protected:
     */
     ImageContext();
 
-private:
+    
     byte* d_pixels;
     size_t d_length;
     size_t d_currentOffset;
     PixelFormat d_format;
+    // Disabled operation
+    ImageContext(ImageContext&);
+    ImageContext& operator=(ImageContext&);
 };
   
   

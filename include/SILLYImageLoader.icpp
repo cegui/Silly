@@ -33,13 +33,7 @@ namespace SILLY
 {
 
 inline ImageLoader::~ImageLoader()
-{
-	
-}
-
-inline void ImageLoader::destroyContext(ImageContext* context)
-{
-    delete context;
+{	
 }
 
 } // End of section namespace SILLY

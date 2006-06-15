@@ -13,9 +13,8 @@ pkginc_HEADERS = \
 
 if SILLY_OPT_INLINE
 pkginc_HEADERS += \
-  SILLYDataSource.iccp \
+  SILLYDataSource.icpp \
   SILLYMemoryDataSource.icpp \
-  SILLYImageHeader.icpp \
   SILLYImageContext.icpp \
   SILLYImageLoader.icpp \
   SILLYImageLoaderManager.icpp \

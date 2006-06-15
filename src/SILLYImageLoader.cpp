@@ -32,16 +32,25 @@
 #endif
 
 #include "SILLYImageLoader.h"
-
 #ifndef SILLY_OPT_INLINE
+#warning "Inlining disabled"
 #define inline 
 #include "SILLYImageLoader.icpp"
 #undef inline
 #endif 
+#include "SILLYImageContext.h" 
 
 // Start of SILLY namespace section
 namespace SILLY
 {
+
+
+void ImageLoader::destroyContext(ImageContext* context)
+{
+    delete context;
+}
+
+
 } // end of SILLY namespace section 
 
 

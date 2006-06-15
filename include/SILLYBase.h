@@ -64,6 +64,20 @@ enum PixelFormat
   Typename for a byte 
 */
 typedef unsigned char byte;
+/*! 
+  \brief 
+  Initialize the SILLY Library 
+
+  \return 
+  True if the initialization was successfull false otherwise.
+*/ 
+bool SILLY_EXPORT SILLYInit();
+
+/*! 
+  \brief 
+  Cleanup SILLY library internal 
+*/ 
+void SILLY_EXPORT SILLYCleanup();
 
 } // End of section namespace SILLY 
 

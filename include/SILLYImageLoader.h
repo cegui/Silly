@@ -29,14 +29,12 @@
  ***************************************************************************/
 #ifndef _SILLYImageLoader_h_ 
 #define _SILLYImageLoader_h_
-#include "SILLYBase.h" 
-#include "SILLYImageHeader.h"
-#include "SILLYImageContext.h" 
+#include "SILLYBase.h"
 // Start of section namespace SILLY 
 namespace SILLY
 {
 class DataSource; 		// Forward declaration
-
+class ImageContext;		// Forward declaration
  
 /*! 
   \brief

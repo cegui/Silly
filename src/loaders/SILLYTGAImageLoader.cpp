@@ -117,22 +117,30 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
     size_t numPixels = w * h;
     const byte* input = data->getDataPtr() + offset;
     // Read image data 
-    
+    byte red;
+    byte green;
+    byte blue;
+    byte alpha;    
     // Uncompressed 
     if (tga->d_imageType == 2)
     {
-        byte red;
-        byte green;
-        byte blue;
-        byte alpha;
         
         switch(bpp)
         {
         case 2: //BGR
-            // Todo 
+            // Todo
             for(size_t i = 0 ; i < numPixels ; ++i)
             {
+                unsigned short pixel;
+                pixel = *(input++);
+                pixel = pixel << 8;
+                pixel |= *(input++);
                 
+                alpha = pixel & 0xf000 ? 0xff : 0x00;
+                blue = static_cast<byte>((pixel & 0x1f) << 3);
+				green = static_cast<byte>(((pixel >> 5) & 0x1f) << 3);
+				red = static_cast<byte>(((pixel >> 10) & 0x1f) << 3);
+                context->setNextPixel(red, green, blue, alpha);
             }
             break;
             
@@ -140,9 +148,9 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
             alpha = 0xff;
             for(size_t i = 0 ; i < numPixels ; ++i)
             {
-                red = *(input++);
-                green = *(input++);
                 blue = *(input++);
+                green = *(input++);
+                red = *(input++);
                 context->setNextPixel(red, green, blue, alpha);
             }
             break;
@@ -151,9 +159,9 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
             alpha = 0xff;
             for(size_t i = 0 ; i < numPixels ; ++i)
             {
-                red = *(input++);
-                green = *(input++);
                 blue = *(input++);
+                green = *(input++);
+                red = *(input++);
                 alpha = *(input++);
                 context->setNextPixel(red, green, blue, alpha);
             }
@@ -163,21 +171,116 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
     else 
     {
         size_t pixelsRead = 0;
+        size_t num, i, j;
+        byte header;
+        
         switch(bpp)
         {
         case 2:
+            while(pixelsRead < numPixels)
+            {
+                header = *(input++);
+                num  = 1 + (header & 0x7f);
+                if (header & 0x80)
+                {
+                    unsigned short pixel;
+                    pixel = *(input++);
+                    pixel = pixel << 8;
+                    pixel |= *(input++);
+                    
+                    alpha = pixel & 0xf000 ? 0xff : 0x00;
+                    blue = static_cast<byte>((pixel & 0x1f) << 3);
+                    green = static_cast<byte>(((pixel >> 5) & 0x1f) << 3);
+                    red = static_cast<byte>(((pixel >> 10) & 0x1f) << 3);
+                    for(i = 0 ; i < num ; ++i)
+                    {
+                        context->setNextPixel(red, green, blue, alpha);
+                    }
+                }
+                else 
+                {
+                    for (i = 0 ; i < num ; ++i)
+                    {
+                        unsigned short pixel;
+                        pixel = *(input++);
+                        pixel = pixel << 8;
+                        pixel |= *(input++);    
+                        alpha = pixel & 0xf000 ? 0xff : 0x00;
+                        blue = static_cast<byte>((pixel & 0x1f) << 3);
+                        green = static_cast<byte>(((pixel >> 5) & 0x1f) << 3);
+                        red = static_cast<byte>(((pixel >> 10) & 0x1f) << 3);
+                        context->setNextPixel(red, green, blue, alpha);
+                    }
+                }
+                pixelsRead += num;
+            }
             
             break;
         case 3:
-            
+            alpha = 0xff;
+            while(pixelsRead < numPixels)
+            {
+                header = *(input++);
+                num  = 1 + (header & 0x7f);
+                if (header & 0x80)
+                {
+                    blue = *(input++);
+                    green = *(input++);
+                    red = *(input++);
+                    for(i = 0 ; i < num ; ++i)
+                    {
+                        context->setNextPixel(red, green, blue, alpha);
+                    }
+                }
+                else 
+                {
+                    for (i = 0 ; i < num ; ++i)
+                    {
+                        blue = *(input++);
+                        green = *(input++);
+                        red = *(input++);
+                        context->setNextPixel(red, green, blue, alpha);
+                    }
+                }
+                pixelsRead += num;
+            }
             break;
             
         case 4:
-                
+            while(pixelsRead < numPixels)
+            {
+                header = *(input++);
+                num  = 1 + (header & 0x7f);
+                if (header & 0x80)
+                {
+                    alpha = *(input++);
+                    blue = *(input++);
+                    green = *(input++);
+                    red = *(input++);
+                    for(i = 0 ; i < num ; ++i)
+                    {
+                        context->setNextPixel(red, green, blue, alpha);
+                    }
+                }
+                else 
+                {
+                    for (i = 0 ; i < num ; ++i)
+                    {
+                        alpha = *(input++);
+                        blue = *(input++);
+                        green = *(input++);
+                        red = *(input++);
+                        context->setNextPixel(red, green, blue, alpha);
+                    }
+                }
+                pixelsRead += num;
+            }    
             break;
         }    
     }
-        /*
+    // Flip the image if needed 
+    return tga->flipVert();
+            /*
             size_t num, i, j;
             byte header;
       
@@ -209,73 +312,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
                 pixelsRead += num;
             }
         }
-        // Check wether flipping is needed or not 
-        if ((0x10 & tga->d_description) == 0)
-        {
-            byte *p1,*p2,*tmp;	// tmp pointers
-            int len = w*bpp;		// length of horizontal line in bytes
-            tmp = new byte[len];
-            if ( !tmp )
-                return false;
-            
-            int y,y2;
-            y2 = h-1;
-            for ( y = 0; y < h>>1; y++ )
-            {
-                p1 = (tga->d_pixels) + len * y;
-                p2 = (tga->d_pixels) + len * y2;
-                memcpy( tmp, p1, len );
-                memcpy( p1, p2, len );
-                memcpy( p2, tmp, len );
-                y2--;
-            }
-            delete [] tmp;
-        }
-    }
-    // Apply pixel conversion now 
-    switch(resultFormat)
-    {
-    case PF_RGBA:
-        convertToRGBA(tga);
-        break;
-        
-    case PF_RGB:
-        convertToRGB(tga);
-        break;
-        
-    case PF_BGR:
-        convertToBGR(tga);
-        break;
-    case PF_ORIGIN:
-        
-    };
-        */
-    return true; 
-}
-/*
-void TGAImageLoader::convertToBGR(RawContainer& result, TGAImageContext* context)
-{
-    
-}
-void TGAImageLoader::convertToRGB(RawContainer& result, TGAImageContext* context)
-{
-    switch(context->bpp)
-    {
-    case 2:
-    case 3:
-        
-    case 4:
-    }
-    
+            */
 }
 
-void TGAImageLoader::convertToRGBA(RawContainer& result, TGAImageContext* context)
-{
-    
-}
-void TGAImageLoader::destroyContext(ImageContext* context)
-{
-    delete context;
-}
-*/
 } // End section of namespace SILLY 

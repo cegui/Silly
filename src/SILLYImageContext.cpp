@@ -32,17 +32,13 @@
 #endif
 
 #include "SILLYImageContext.h"
-
 #ifndef SILLY_OPT_INLINE
 #define inline 
 #include "SILLYImageContext.icpp"
 #undef inline
 #endif
-
 // Start section of namespace SILLY
 namespace SILLY
-{
-
- 
+{ 
 
 } // End section of namespace SILLY 
