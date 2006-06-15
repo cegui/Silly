@@ -33,8 +33,7 @@
 #include "SILLYImageContext.h" 
 // Start of section namespace SILLY 
 namespace SILLY
-{
-
+{  
 /*! 
   \brief
     Image Context for Targa image
@@ -43,12 +42,18 @@ namespace SILLY
 class TGAImageContext : public ImageContext 
 {
 public:
-  TGAImageContext();
-  
   ~TGAImageContext();
   
 private:
+  byte d_idLength;
+  byte d_imageType;
+  size_t d_width;
+  size_t d_height;
+  byte d_depth;
+  byte d_description;
 
+  friend class TGAImageLoader;
+  
 };
   
   

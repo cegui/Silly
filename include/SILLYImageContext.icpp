@@ -31,8 +31,69 @@
 // Start of section namespace SILLY
 namespace SILLY
 {
+
+inline ImageContext::ImageContext()
+    : d_pixels(0), d_num(0), d_length(0), d_currentOffset(0)
+{
+}
+
+
 inline ImageContext::~ImageContext() 
 {
 }    	
+
+
+inline void ImageContext::setDestination(byte* pixels, size_t length, PixelFormat format)
+{
+    d_pixels = pixels;
+    d_length = length;
+    d_currentOffset = 0;
+    d_format = format;
+    switch (format)
+    {
+    case PF_BGR:
+        d_bpp = 2;
+        break;
+    case PF_RGB:
+        d_bpp = 3;
+        break;
+    case PF_RGBA:    
+        d_bpp = 4;
+        break;
+    default:
+        // Unsupported format 
+    }
+}
+
+void ImageContext::setNextPixel(byte red, byte green, byte bleu, byte alpha)
+{
+    assert(d_currentOffset < d_length && "ASSERT: try to set a pixel outside of the image");
+    switch(d_format)
+    {
+    case PF_BGR:
+        // The hard part 
+        
+        break;
+
+    case PF_RGB:
+        // Ignore alpha channel 
+        d_pixels[d_currentOffset++] = red;
+        d_pixels[d_currentOffset++] = green;
+        d_pixels[d_currentOffset++] = bleu;
+        break;
+
+    case PF_RGBA:    
+        d_pixels[d_currentOffset++] = red;
+        d_pixels[d_currentOffset++] = green;
+        d_pixels[d_currentOffset++] = bleu;
+        d_pixels[d_currentOffset++] = alpha;
+        break;   
+    default:
+    }
+}
+
+
+
+
 } // End of section namespace SILLY
 

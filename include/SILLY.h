@@ -31,7 +31,6 @@
 #define _SILLY_h_
 
 #include "SILLYBase.h"
-#include "SILLYImageHeader.h"
 #include "SILLYDataSource.h" 
 #include "SILLYMemoryDataSource.h" 
 #include "SILLYImageLoader.h"

@@ -4,7 +4,6 @@ lib_LTLIBRARIES = libsilly.la
 libsilly_la_CXXFLAGS= 
 libsilly_la_LIBADD=
 libsilly_la_SOURCES= \
-  SILLYImageHeader.cpp \
   SILLYDataSource.cpp \
   SILLYMemoryDataSource.cpp \
   SILLYImageLoader.cpp \

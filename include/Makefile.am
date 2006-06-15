@@ -6,7 +6,6 @@ pkginc_HEADERS = \
   SILLYBase.h \
   SILLYDataSource.h \
   SILLYMemoryDataSource.h \
-  SILLYImageHeader.h \
   SILLYImageContext.h \
   SILLYImageLoader.h \
   SILLYImageLoaderManager.h \

@@ -48,7 +48,31 @@ public:
       Destructor 
     */
     virtual ~ImageContext();
+    
+    /*!
+      \brief 
+      Set the destination of the loading 
+    */
+    void setDestination(byte* pixels, size_t length, PixelFormat format);
+    
+    /*! 
+      \brief 
+      Set the next pixel of the image 
+    */
+    void setNextPixel(byte red, byte green, byte bleu, byte alpha);
+
+protected:
+    /*! 
+      \brief 
+      Constructor
+    */
+    ImageContext();
+
 private:
+    byte* d_pixels;
+    size_t d_length;
+    size_t d_currentOffset;
+    PixelFormat d_format;
 };
   
   

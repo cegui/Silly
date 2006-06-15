@@ -31,11 +31,12 @@
 #define _SILLYImageLoader_h_
 #include "SILLYBase.h" 
 #include "SILLYImageHeader.h"
+#include "SILLYImageContext.h" 
 // Start of section namespace SILLY 
 namespace SILLY
 {
 class DataSource; 		// Forward declaration
-class ImageContext;     // Forward declaration
+
  
 /*! 
   \brief
@@ -49,6 +50,7 @@ public:
       Destructor 
     */
     virtual ~ImageLoader();
+
     /*! 
       \brief 
       Parse the header of the image and fill the header struct 
@@ -59,7 +61,9 @@ public:
 
       \return Context for the rest of the parsing or 0 if an error occured 
     */
-    virtual ImageContext* parseHeader(ImageHeader& header, DataSource* data) = 0;
+    virtual ImageContext* loadHeader(size_t& width, size_t& height, PixelFormat& formatSource, DataSource* data) = 0;
+
+
     /*!
       \brief 
       Parse the pixels data of the image and fill the header struct 
@@ -70,7 +74,7 @@ public:
       
       \return true on success false on error 
     */
-    virtual bool parsePixels(RawContainer& result, PixelFormat resultFormat, DataSource* data, ImageContext* context) = 0;
+    virtual bool loadImageData(PixelFormat resultFormat, DataSource* data, ImageContext* context) = 0;
     
     /*! 
       \brief 
@@ -78,7 +82,7 @@ public:
       
       \param context a pointer to the context 
     */
-    virtual void destroyContext(ImageContext* context) = 0;
+    void destroyContext(ImageContext* context);
 };
   
 } // End of section namespace SILLY 

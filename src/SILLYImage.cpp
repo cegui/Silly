@@ -48,16 +48,69 @@ namespace SILLY
 {
 
 Image::Image(DataSource& source)
-    : d_imageContext(0), d_imageLoader(0), d_data(&source)
+  : d_width(0), d_height(0), d_bpp(0), d_data(&source), d_imageContext(0), d_imageLoader(0)
+{
+}
+
+
+bool Image::loadImageHeader()
 {
     ImageLoaderList::iterator iter = ImageLoaderManager::getSingleton().begin();
     for (; ! d_imageLoader && iter != ImageLoaderManager::getSingleton().end() ; ++iter)
     {
-        d_imageContext = (*iter)->parseHeader(d_imageHeader, d_data);
+        d_imageContext = (*iter)->loadHeader(d_width, d_height, d_pfSource, d_data);
         if (d_imageContext)
             d_imageLoader = (*iter);
     }
     assert((! d_imageLoader || d_imageContext) && "ASSERT: Internal state of image invalid");
+    return d_imageLoader != 0;
+    
+}
+
+bool Image::loadImageData(PixelFormat resultFormat)
+{
+    switch (resultFormat)
+    {
+    case PF_BGR:
+        d_bpp = 2;
+        
+        break;
+    case PF_RGB:
+        d_bpp = 3;
+        break;
+
+    case PF_RGBA:    
+        d_bpp = 4;
+        break;
+        //default:
+        // Unsupported format 
+    };
+    
+
+    if (! allocate())
+    {
+        d_width = 0;
+        d_height = 0;
+        return false;
+    }
+    d_imageContext->setDestination(d_pixels, d_width * d_height * d_bpp, d_pfResult);
+    
+
+    if (d_imageLoader->loadImageData(resultFormat, d_data, d_imageContext))
+    {
+        d_width = 0;
+        d_height = 0;
+        delete [] d_pixels;
+        return false;
+    }
+    return true;
+}
+
+bool Image::allocate()
+{
+    delete [] d_pixels;
+    d_pixels = new byte[d_bpp * d_width * d_height];
+    return d_pixels != 0;
 }
 
 } // End section of namespace SILLY 

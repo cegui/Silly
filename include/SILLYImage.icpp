@@ -32,22 +32,46 @@
 namespace SILLY
 {
 
-inline const ImageHeader& Image::getImageHeader() 
+inline bool Image::isValid() const
 {
-    return d_imageHeader;
+    return d_width && d_height && d_bpp;
+}
+
+inline size_t Image::getWidth() const
+{
+    return d_width;
+}
+
+inline size_t Image::getHeight() const
+{
+    return d_height;
+}
+
+inline PixelFormat Image::getSourcePixelFormat() const
+{
+    return d_pfSource;
+}
+
+inline PixelFormat Image::getPixelFormat() const
+{
+    return d_pfResult;
+}
+
+inline const byte* Image::getPixelsDataPtr() const
+{
+    return d_pixels;
+}
+
+inline size_t Image::getPixelsDataSize() const
+{
+    return d_width * d_height * d_bpp;
 }
 
 inline Image::~Image()
 {
+    delete d_pixels;
     if (d_imageLoader)
         d_imageLoader->destroyContext(d_imageContext);
-}
-
-inline bool Image::getPixels(RawContainer& result, PixelFormat resultFormat)
-{
-    if (d_imageLoader)
-        return d_imageLoader->parsePixels(result, resultFormat, d_data, d_imageContext);
-    return false;
 }
 
 

@@ -29,12 +29,12 @@
  ***************************************************************************/
 #ifndef _SILLYBase_h_ 
 #define _SILLYBase_h_ 
-#include <vector>
 #include <cassert>
-
-#undef SILLY_OPT_INLINE 
+#include <cstddef>
 
 #if defined(_WIN32) || defined(__WIN32__)
+#   undef SILLY_OPT_INLINE // No inlining 
+#   undef SILLY_BE // Little Endian 
 #   ifdef SILLY_EXPORTS
 #       define SILLY_EXPORT __declspec(dllexport)
 #   else
@@ -47,16 +47,17 @@
 // Start of section namespace SILLY 
 namespace SILLY
 {
+
 /*! 
   \brief 
   List all pixel format supported 
  */
 enum PixelFormat
 {
-    PF_RGBA, //<! 32 bits, pixel format is 8 bits for R, G, B and A channel 
-    PF_RGB,  //<! 24 bits, pixel format is 8 bits for R, G, B 
-    
-    PF_ORIGIN, //<! Use the format of the original image 
+    PF_BGR,    //<! 16 bits, pixel format is A1R5G5B5 (GGGBBBBB,ARRRRRGG on disk)
+    PF_RGB,    //<! 24 bits, pixel format is 8 bits for R, G, B 
+    PF_RGBA,   //<! 32 bits, pixel format is 8 bits for R, G, B and A channel     
+    PF_ORIGIN, //<! This format is used when the input storage use a specific pixel format 
 };
 /*!
   \brief 
@@ -64,13 +65,7 @@ enum PixelFormat
 */
 typedef unsigned char byte;
 
-/*!
-  \brief 
-  Typename for a byte container 
-*/
-typedef std::vector<byte> RawContainer;
-  
 } // End of section namespace SILLY 
 
-
 #endif // end of guard _SILLYBase_h_
+

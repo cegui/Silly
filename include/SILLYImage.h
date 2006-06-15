@@ -32,12 +32,12 @@
 #include "SILLYBase.h" 
 #include "SILLYDataSource.h"
 #include "SILLYImageLoader.h" 
+
 // Start of section namespace SILLY 
 namespace SILLY
 {
 class ImageContext;		// Forward declaration
 
-  
 /*! 
   \brief
     Image is the main user class of the library 
@@ -52,34 +52,90 @@ public:
       \param data the raw input containing the image 
     */
     Image(DataSource& data);
-    
+
+    /*!
+      \brief 
+      Destructor 
+    */
     ~Image();
+
+    /*! 
+      \brief 
+      Return true if the image is valid after its loading 
+    */
+    bool isValid() const;
     
+
     /*! 
       \brief 
       Retrieve the information concerning the image object 
       
+      \return true on success 
     */
-    const ImageHeader& getImageHeader();
-    
+    bool loadImageHeader();
+
     /*!
       \brief 
-      Fill result with pixel of the image converted to \em resultFormat
-      
-      \param result the container that is going to contains the result 
+      Load the image pixels in memory and store them in \em resultFormat 
       
       \param resultFormat the pixel format to be used for storing the result 
       
       \return true on success false if an error occured 
+      
+      \note this function can be called several time if the pixel
+      format are different the format is reloaded 
     */
-    bool getPixels(RawContainer& result, PixelFormat resultFormat = PF_ORIGIN);
+    bool loadImageData(PixelFormat resultFormat = PF_RGBA);
+
+    /*! 
+      \brief 
+      Retrieve the width of the image 
+    */
+    size_t getWidth() const;
     
+    /*!
+      \brief 
+      Retrieve the height of the image 
+    */
+    size_t getHeight() const;
+    
+    /*!
+      \brief 
+      Retrieve the pixel format used for the image storage 
+    */
+    PixelFormat getSourcePixelFormat() const;
+
+    /*! 
+      \brief 
+      Retrieve the pixel format of the resulting image 
+    */
+    PixelFormat getPixelFormat() const;
+    
+    /*! 
+      \brief Get a pointer to the pixels data 
+    */
+    const byte* getPixelsDataPtr() const;
+    /*! 
+      \brief 
+      Get the size of the pixel buffer 
+    */
+    size_t getPixelsDataSize() const;
+
 private:
-    ImageHeader d_imageHeader;  //!< Store the image header 
+    bool allocate();
+
+private:
+
+    size_t d_width; 		  //!< Store the width of the image 
+    size_t d_height;	          //!< Store the height of the image 
+    size_t d_bpp;		  //!< Store the number of byte per pixel used 
+    PixelFormat d_pfSource;       //!< Store the pixel format in the source image 
+    PixelFormat d_pfResult;       //!< Store the pixel format in the resulting image
+    byte* d_pixels;		  //!< Store the pixel of the resulting image
+    DataSource* d_data;           //!< Store a pointer to the input data
     ImageContext* d_imageContext; //!< Store a pointer to the image context 
-    ImageLoader* d_imageLoader; //!< Store a pointer to the image loader used 
-    DataSource* d_data;         //!< Store a pointer to the input data 
-    
+    ImageLoader* d_imageLoader;   //!< Store a pointer to the image loader used
+
     // Disabled operation
     Image(Image&);
     Image& operator=(Image&);

@@ -43,14 +43,24 @@ class TGAImageContext;
 class TGAImageLoader : public ImageLoader 
 {
 public:
-  TGAImageLoader();
-  ~TGAImageLoader();
-  ImageContext* parseHeader(ImageHeader& header, DataSource* data);
-  bool parsePixels(RawContainer& result, PixelFormat resultFormat, DataSource* data, ImageContext* context);
-  void destroyContext(ImageContext* context);
- private:
+
+    TGAImageLoader();
+    
+    ~TGAImageLoader();
+    
+
+    ImageContext* loadHeader(size_t& width, size_t& height, PixelFormat& formatSource, DataSource* data);
+
+    bool loadImageData(PixelFormat resultFormat, 
+                     DataSource* data, 
+                     ImageContext* context);
+
+    void destroyContext(ImageContext* context);
+
+private:
 
 };
+
 } // End of section namespace SILLY 
 
 // Inclue inline function when needed 
