@@ -88,7 +88,7 @@ inline size_t ImageContext::getHeight() const
 
 inline PixelFormat ImageContext::getPixelFormat() const
 {
-
+	return d_format;
 }
 
 } // End of section namespace SILLY

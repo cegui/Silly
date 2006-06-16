@@ -186,7 +186,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, PixelOrigin origin,
     else 
     {
         size_t pixelsRead = 0;
-        size_t num, i, j;
+        size_t num, i;
         byte header;
         
         switch(bpp)
@@ -294,7 +294,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, PixelOrigin origin,
         }    
     }
     // Flip or not flip that is the question 
-    if (tga->d_description & 0x10 == 0x10) // Upper Left origin 
+    if ((tga->d_description & 0x10) == 0x10) // Upper Left origin 
     {
         if  (origin == PO_BOTTOM_LEFT)
             return tga->flip();
