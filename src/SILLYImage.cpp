@@ -67,12 +67,12 @@ bool Image::loadImageHeader()
     
 }
 
-bool Image::loadImageData(PixelFormat resultFormat)
+bool Image::loadImageData(PixelFormat resultFormat, PixelOrdering order)
 {
     d_pfResult = resultFormat;
     switch (resultFormat)
     {
-    case PF_BGR:
+    case PF_A1B5G5R5:
         d_bpp = 2;
         
         break;
@@ -97,11 +97,12 @@ bool Image::loadImageData(PixelFormat resultFormat)
     d_imageContext->setDestination(d_pixels, d_width * d_height * d_bpp, d_pfResult);
     
 
-    if (d_imageLoader->loadImageData(resultFormat, d_data, d_imageContext))
+    if (! d_imageLoader->loadImageData(resultFormat, d_data, d_imageContext))
     {
         d_width = 0;
         d_height = 0;
         delete [] d_pixels;
+        d_pixels = 0;
         return false;
     }
     return true;
@@ -110,7 +111,7 @@ bool Image::loadImageData(PixelFormat resultFormat)
 bool Image::allocate()
 {
     delete [] d_pixels;
-    printf("%d\n", d_bpp);
+    d_pixels = 0;
     d_pixels = new byte[d_bpp * d_width * d_height];
     return d_pixels != 0;
 }

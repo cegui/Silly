@@ -54,11 +54,21 @@ namespace SILLY
  */
 enum PixelFormat
 {
-    PF_BGR,    //<! 16 bits, pixel format is A1R5G5B5 (GGGBBBBB,ARRRRRGG on disk)
-    PF_RGB,    //<! 24 bits, pixel format is 8 bits for R, G, B 
-    PF_RGBA,   //<! 32 bits, pixel format is 8 bits for R, G, B and A channel     
-    PF_ORIGIN, //<! This format is used when the input storage use a specific pixel format 
+    PF_A1B5G5R5,    //<! 16 bits, pixel format is A1R5G5B5 (GGGBBBBB,ARRRRRGG on disk)
+    PF_RGB,         //<! 24 bits, pixel format is 8 bits for R, G, B 
+    PF_RGBA,        //<! 32 bits, pixel format is 8 bits for R, G, B and A channel     
+    PF_ORIGIN,      //<! This format is used when the input storage use a specific pixel format 
 };
+/*! 
+  \brief 
+  List all pixel ordering supported 
+*/
+enum PixelOrdering 
+{
+    PO_TOP_LEFT,     //<! The resulting image origine is Top Left
+    PO_BOTTOM_LEFT,  //<! The resulting image origine is Bottom Left
+};
+
 /*!
   \brief 
   Typename for a byte 

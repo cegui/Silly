@@ -39,6 +39,7 @@
 #undef inline
 #endif 
 #include <cstring>
+#include <cstdio>
 // Start section of namespace SILLY
 namespace SILLY
 {
@@ -47,30 +48,26 @@ namespace SILLY
 bool TGAImageContext::flipVert()
 {
     // Do the flipping 
-    if (d_description & 0x10 == 0) 
+    byte *p1,*p2,*tmp;      // tmp pointers
+    size_t len = d_width*d_depth; // length of horizontal line in bytes
+    tmp = new byte[len];    // Allocate a temporary line
+      
+    if ( !tmp )
+        return false;
+        
+    size_t y , y2;
+    y2 = d_height - 1;
+    for ( y = 0; y < d_height >> 1; y++ )
     {
-
-        byte *p1,*p2,*tmp;      // tmp pointers
-        size_t len = d_width*d_depth; // length of horizontal line in bytes
-        tmp = new byte[len];    // Allocate a temporary line
-        
-        if ( !tmp )
-            return false;
-        
-        size_t y , y2;
-        y2 = d_height - 1;
-        for ( y = 0; y < d_height >> 1; y++ )
-        {
-            p1 = (d_pixels) + len * y;
-            p2 = (d_pixels) + len * y2;
-            memcpy( tmp, p1, len );
-            memcpy( p1, p2, len );
-            memcpy( p2, tmp, len );
-            y2--;
-        }
-        delete [] tmp;
-    }
-    return true;
+         p1 = (d_pixels) + len * y;
+         p2 = (d_pixels) + len * y2;
+         memcpy( tmp, p1, len );
+         memcpy( p1, p2, len );
+         memcpy( p2, tmp, len );
+         y2--;
+     }
+     delete [] tmp;
+     return true;
 }
 
  

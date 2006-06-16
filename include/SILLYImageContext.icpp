@@ -56,7 +56,7 @@ inline void ImageContext::setNextPixel(byte red, byte green, byte bleu, byte alp
     //assert(d_currentOffset < d_length && "ASSERT: try to set a pixel outside of the image");
     switch(d_format)
     {
-    case PF_BGR:
+    case PF_A1B5G5R5:
         // The hard part 
         assert(0 && "ASSERT: Not yet implemented");
         break;

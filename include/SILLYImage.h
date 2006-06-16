@@ -86,7 +86,7 @@ public:
       \note this function can be called several time if the pixel
       format are different the format is reloaded 
     */
-    bool loadImageData(PixelFormat resultFormat = PF_RGBA);
+    bool loadImageData(PixelFormat resultFormat = PF_RGBA, PixelOrdering order = PO_TOP_LEFT);
 
     /*! 
       \brief 

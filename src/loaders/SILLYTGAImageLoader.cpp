@@ -42,6 +42,7 @@
 #include "loaders/SILLYTGAImageContext.h" 
 
 #include <cstring> 
+#include <cstdio>
 
 // Start section of namespace SILLY
 namespace SILLY
@@ -57,14 +58,16 @@ TGAImageLoader::~TGAImageLoader()
 
 #ifdef SILLY_BE
 #define READ_WORD(res, start)                   \
-    (res) = (*data)[(start) + 1];               \
+    (res) = 0;                                  \
+    (res) = data->getDataPtr()[(start) + 1];               \
     (res) = (res) << 8;                         \
-    (res) += (*data)[(start)];
+    (res) |= data->getDataPtr()[(start)];
 #else 
 #define READ_WORD(res, start)                   \
-    (res) = (*data)[(start)];                   \
+    (res) = 0;                                  \
+    (res) = data->getDataPtr()[(start)];                   \
     (res) = (res) << 8;                          \
-    (res) += (*data)[(start) + 1];
+    (res) |= data->getDataPtr()[(start) + 1];
 #endif 
 
 ImageContext* TGAImageLoader::loadHeader(size_t& width, size_t& height, PixelFormat& formatSource, DataSource* data)
@@ -83,9 +86,13 @@ ImageContext* TGAImageLoader::loadHeader(size_t& width, size_t& height, PixelFor
     // offset: 3 Skip color map + 5 bytes 
     // offset: 8 Skip xorg / yorg + 4 bytes 
     // offset:
-    READ_WORD(width, 12);
-    READ_WORD(height, 14);
-    depth = (*data)[16] >> 3;    
+    width = data->getDataPtr()[13];
+    width = width << 8;
+    width |= data->getDataPtr()[12];
+    height = data->getDataPtr()[15];
+    height = height << 8;
+    height |= data->getDataPtr()[14];
+    depth = data->getDataPtr()[16] >> 3;    
     
     // We support BGR, RGB and RGBA image at the moment 
     if (depth < 2 && depth > 4) 
@@ -93,6 +100,14 @@ ImageContext* TGAImageLoader::loadHeader(size_t& width, size_t& height, PixelFor
         return 0;
     }
     description = (*data)[17];
+    printf("Id Length: %d\n", idLength);
+    printf("colorMapType: %d\n", colorMapType);
+    printf("imageType: %d\n", imageType);
+    printf("width: %d\n", width);
+    printf("height: %d\n", height);
+    printf("depth: %d\n", depth);
+
+
     TGAImageContext* context = new TGAImageContext;
     if (context)
     {
@@ -127,7 +142,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
         
         switch(bpp)
         {
-        case 2: //BGR
+        case 2: //BGR_16
             // Todo
             for(size_t i = 0 ; i < numPixels ; ++i)
             {
@@ -144,7 +159,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
             }
             break;
             
-        case 3: // RGB
+        case 3: // BGR_24
             alpha = 0xff;
             for(size_t i = 0 ; i < numPixels ; ++i)
             {
@@ -155,7 +170,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
             }
             break;
             
-        case 4: // RGBA 
+        case 4: // BGRA_32
             alpha = 0xff;
             for(size_t i = 0 ; i < numPixels ; ++i)
             {
@@ -177,6 +192,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
         switch(bpp)
         {
         case 2:
+            printf("Loading from BGR 16 bits\n");
             while(pixelsRead < numPixels)
             {
                 header = *(input++);
@@ -217,6 +233,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
             
             break;
         case 3:
+            printf("Loading from RGB 24 bits\n");
             alpha = 0xff;
             while(pixelsRead < numPixels)
             {
@@ -247,16 +264,17 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
             break;
             
         case 4:
+            printf("Loading from RGBA 32 bits\n");
             while(pixelsRead < numPixels)
             {
                 header = *(input++);
                 num  = 1 + (header & 0x7f);
                 if (header & 0x80)
                 {
-                    alpha = *(input++);
                     blue = *(input++);
                     green = *(input++);
                     red = *(input++);
+                    alpha = *(input++);
                     for(i = 0 ; i < num ; ++i)
                     {
                         context->setNextPixel(red, green, blue, alpha);
@@ -266,10 +284,10 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
                 {
                     for (i = 0 ; i < num ; ++i)
                     {
-                        alpha = *(input++);
                         blue = *(input++);
                         green = *(input++);
                         red = *(input++);
+                        alpha = *(input++);
                         context->setNextPixel(red, green, blue, alpha);
                     }
                 }
@@ -280,39 +298,6 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
     }
     // Flip the image if needed 
     return tga->flipVert();
-            /*
-            size_t num, i, j;
-            byte header;
-      
-            byte onePix[4];
-            byte* pixRes = tga->d_pixels;
-            
-            while(pixelsRead < numPixels)
-            {
-                header = *(dataIn++);
-                
-                num = 1 + (header & 0x7f);
-                if (header & 0x80)
-                {
-                    memcpy(onePix, dataIn, bpp);
-                    dataIn += bpp;
-                    for (i = 0 ; i < num ; ++i)
-                    {
-                        memcpy(pixRes, onePix, bpp);
-                        pixRes += bpp;
-                    }
-                }
-                else 
-                {
-                    memcpy(pixRes, dataIn, num * bpp);
-                    dataIn += num * bpp;
-                    pixRes += num * bpp;
-                    
-                }
-                pixelsRead += num;
-            }
-        }
-            */
 }
 
 } // End section of namespace SILLY 

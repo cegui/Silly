@@ -69,7 +69,7 @@ inline size_t Image::getPixelsDataSize() const
 
 inline Image::~Image()
 {
-    delete d_pixels;
+    delete [] d_pixels;
     if (d_imageLoader)
         d_imageLoader->destroyContext(d_imageContext);
 }
