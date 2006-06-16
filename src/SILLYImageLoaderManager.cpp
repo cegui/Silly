@@ -53,11 +53,15 @@
 namespace SILLY
 {
 
+// we need to do "reference counting" for init/exit to allow silly to be used
+// from inside multiple independent libraries simultaneously.
+static size_t silly_init_counter = 0;
+
 ImageLoaderManager* ImageLoaderManager::d_instance = 0;
-  
 
 ImageLoaderManager::ImageLoaderManager()
 {
+    assert(d_instance == 0);
     d_instance = this;
     add(new TGAImageLoader);
 #ifdef SILLY_HAVE_JPG
@@ -76,18 +80,29 @@ ImageLoaderManager::~ImageLoaderManager()
     {
         delete (*iter);
     }
+    d_instance = 0;
 }
+
 
 bool SILLYInit()
 {
-    if (new ImageLoaderManager)
-        return true;
-    return false;
+    if (ImageLoaderManager::getSingletonPtr() == 0)
+    {
+        if (!new ImageLoaderManager)
+        {
+            return false;
+        }
+    }
+    ++silly_init_counter;
+    return true;
 }
 
 void SILLYCleanup()
 {
-    delete ImageLoaderManager::getSingletonPtr();
+    if (--silly_init_counter == 0)
+    {
+        delete ImageLoaderManager::getSingletonPtr();
+    }
 }
 
 } // End of SILLY namespace section 
