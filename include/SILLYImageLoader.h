@@ -53,26 +53,30 @@ public:
       \brief 
       Parse the header of the image and fill the header struct 
       
-      \param header the Image header 
+      \param formatSource this var should contains the pixel format used to store the image initialy 
 
       \param data the input of the image data 
 
       \return Context for the rest of the parsing or 0 if an error occured 
     */
-    virtual ImageContext* loadHeader(size_t& width, size_t& height, PixelFormat& formatSource, DataSource* data) = 0;
+    virtual ImageContext* loadHeader(PixelFormat& formatSource, DataSource* data) = 0;
 
 
     /*!
       \brief 
       Parse the pixels data of the image and fill the header struct 
-      
+
+      \param resultFormat the expected pixel format 
+
+      \param origin the layout of the pixel in the resulting pixel array 
+
       \param data the input of the image data
 
       \param context the data associated to the image parsing 
       
       \return true on success false on error 
     */
-    virtual bool loadImageData(PixelFormat resultFormat, DataSource* data, ImageContext* context) = 0;
+    virtual bool loadImageData(PixelFormat resultFormat, PixelOrigin origin, DataSource* data, ImageContext* context) = 0;
     
     /*! 
       \brief 

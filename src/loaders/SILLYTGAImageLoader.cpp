@@ -70,12 +70,14 @@ TGAImageLoader::~TGAImageLoader()
     (res) |= data->getDataPtr()[(start) + 1];
 #endif 
 
-ImageContext* TGAImageLoader::loadHeader(size_t& width, size_t& height, PixelFormat& formatSource, DataSource* data)
+ImageContext* TGAImageLoader::loadHeader(PixelFormat& formatSource, DataSource* data)
 {
     
     byte idLength = data->getDataPtr()[0];
     byte colorMapType = data->getDataPtr()[1];
     byte imageType = data->getDataPtr()[2];
+    size_t width;
+    size_t height;
     byte depth;
     byte description;
     if ((imageType != 2 && imageType != 10) || colorMapType)
@@ -85,48 +87,47 @@ ImageContext* TGAImageLoader::loadHeader(size_t& width, size_t& height, PixelFor
     }
     // offset: 3 Skip color map + 5 bytes 
     // offset: 8 Skip xorg / yorg + 4 bytes 
-    // offset:
+#ifdef SILLY_BE 
+    width = data->getDataPtr()[12];
+    width = width << 8;
+    width |= data->getDataPtr()[13];
+    height =  data->getDataPtr()[14];
+    height = height << 8;
+    height |= data->getDataPtr()[15];
+#else 
     width = data->getDataPtr()[13];
     width = width << 8;
     width |= data->getDataPtr()[12];
     height = data->getDataPtr()[15];
     height = height << 8;
     height |= data->getDataPtr()[14];
+#endif 
     depth = data->getDataPtr()[16] >> 3;    
-    
     // We support BGR, RGB and RGBA image at the moment 
     if (depth < 2 && depth > 4) 
     {   
         return 0;
     }
     description = (*data)[17];
-    printf("Id Length: %d\n", idLength);
-    printf("colorMapType: %d\n", colorMapType);
-    printf("imageType: %d\n", imageType);
-    printf("width: %d\n", width);
-    printf("height: %d\n", height);
-    printf("depth: %d\n", depth);
 
 
-    TGAImageContext* context = new TGAImageContext;
+    TGAImageContext* context = new TGAImageContext(width, height);
     if (context)
     {
         context->d_idLength = idLength;
         context->d_imageType = imageType;
-        context->d_width = width;
-        context->d_height = height;
         context->d_depth = depth;
         context->d_description = description;
     }
     return context;
 }
 
-bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, ImageContext* context)
+bool TGAImageLoader::loadImageData(PixelFormat resultFormat, PixelOrigin origin, DataSource* data, ImageContext* context)
 {
     TGAImageContext* tga = static_cast<TGAImageContext*>(context);
     size_t bpp = tga->d_depth;
-    size_t w = tga->d_width;
-    size_t h = tga->d_height;    
+    size_t w = tga->getWidth();
+    size_t h = tga->getHeight();    
     size_t imgSize = w * h * bpp;
     size_t offset = 18 + tga->d_idLength;
     size_t numPixels = w * h;
@@ -142,8 +143,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
         
         switch(bpp)
         {
-        case 2: //BGR_16
-            // Todo
+        case 2: //A1B5G5R5
             for(size_t i = 0 ; i < numPixels ; ++i)
             {
                 unsigned short pixel;
@@ -191,8 +191,7 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
         
         switch(bpp)
         {
-        case 2:
-            printf("Loading from BGR 16 bits\n");
+        case 2: //A1B5G5R5
             while(pixelsRead < numPixels)
             {
                 header = *(input++);
@@ -233,7 +232,6 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
             
             break;
         case 3:
-            printf("Loading from RGB 24 bits\n");
             alpha = 0xff;
             while(pixelsRead < numPixels)
             {
@@ -264,7 +262,6 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
             break;
             
         case 4:
-            printf("Loading from RGBA 32 bits\n");
             while(pixelsRead < numPixels)
             {
                 header = *(input++);
@@ -296,8 +293,18 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, DataSource* data, I
             break;
         }    
     }
-    // Flip the image if needed 
-    return tga->flipVert();
+    // Flip or not flip that is the question 
+    if (tga->d_description & 0x10 == 0x10) // Upper Left origin 
+    {
+        if  (origin == PO_BOTTOM_LEFT)
+            return tga->flip();
+    }
+    else 
+    {
+        if (origin == PO_TOP_LEFT)
+            return tga->flip();
+    }
+    return true;
 }
 
 } // End section of namespace SILLY 

@@ -34,17 +34,17 @@ namespace SILLY
 
 inline bool Image::isValid() const
 {
-    return d_width && d_height && d_bpp;
+    return d_imageContext && d_pixels;
 }
 
 inline size_t Image::getWidth() const
 {
-    return d_width;
+    return d_imageContext->getWidth();
 }
 
 inline size_t Image::getHeight() const
 {
-    return d_height;
+    return d_imageContext->getHeight();
 }
 
 inline PixelFormat Image::getSourcePixelFormat() const
@@ -54,7 +54,7 @@ inline PixelFormat Image::getSourcePixelFormat() const
 
 inline PixelFormat Image::getPixelFormat() const
 {
-    return d_pfResult;
+    return d_imageContext->getPixelFormat();
 }
 
 inline const byte* Image::getPixelsDataPtr() const
@@ -64,7 +64,7 @@ inline const byte* Image::getPixelsDataPtr() const
 
 inline size_t Image::getPixelsDataSize() const
 {
-    return d_width * d_height * d_bpp;
+    return getWidth() * getHeight() * d_bpp;
 }
 
 inline Image::~Image()

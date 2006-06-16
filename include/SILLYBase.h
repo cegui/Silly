@@ -61,9 +61,9 @@ enum PixelFormat
 };
 /*! 
   \brief 
-  List all pixel ordering supported 
+  List all pixel origin supported 
 */
-enum PixelOrdering 
+enum PixelOrigin 
 {
     PO_TOP_LEFT,     //<! The resulting image origine is Top Left
     PO_BOTTOM_LEFT,  //<! The resulting image origine is Bottom Left

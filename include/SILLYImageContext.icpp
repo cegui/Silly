@@ -32,8 +32,8 @@
 namespace SILLY
 {
 
-inline ImageContext::ImageContext()
-    : d_pixels(0), d_length(0), d_currentOffset(0), d_format(PF_RGBA)
+inline ImageContext::ImageContext(size_t width, size_t height)
+    : d_pixels(0), d_length(0), d_width(width), d_height(height), d_currentOffset(0), d_format(PF_RGBA) 
 {
 }
 
@@ -75,6 +75,20 @@ inline void ImageContext::setNextPixel(byte red, byte green, byte bleu, byte alp
         break;   
     
     }
+}
+inline size_t ImageContext::getWidth() const
+{
+    return d_width;
+}
+
+inline size_t ImageContext::getHeight() const
+{
+    return d_height;
+}
+
+inline PixelFormat ImageContext::getPixelFormat() const
+{
+
 }
 
 } // End of section namespace SILLY

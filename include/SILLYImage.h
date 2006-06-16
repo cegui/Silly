@@ -31,13 +31,13 @@
 #ifndef _SILLYImage_h_ 
 #define _SILLYImage_h_
 #include "SILLYBase.h" 
+#include "SILLYImageContext.h"
 #include "SILLYDataSource.h"
 #include "SILLYImageLoader.h" 
 
 // Start of section namespace SILLY 
 namespace SILLY
 {
-class ImageContext;		// Forward declaration
 
 /*! 
   \brief
@@ -80,13 +80,15 @@ public:
       Load the image pixels in memory and store them in \em resultFormat 
       
       \param resultFormat the pixel format to be used for storing the result 
+
+      \param origin expected origin position for the pixels 
       
       \return true on success false if an error occured 
       
       \note this function can be called several time if the pixel
       format are different the format is reloaded 
     */
-    bool loadImageData(PixelFormat resultFormat = PF_RGBA, PixelOrdering order = PO_TOP_LEFT);
+    bool loadImageData(PixelFormat resultFormat = PF_RGBA, PixelOrigin origin = PO_TOP_LEFT);
 
     /*! 
       \brief 
@@ -127,12 +129,9 @@ private:
 
 private:
 
-    size_t d_width; 		  //!< Store the width of the image 
-    size_t d_height;	          //!< Store the height of the image 
-    size_t d_bpp;		  //!< Store the number of byte per pixel used 
+    size_t d_bpp;		          //!< Store the number of byte per pixel used 
     PixelFormat d_pfSource;       //!< Store the pixel format in the source image 
-    PixelFormat d_pfResult;       //!< Store the pixel format in the resulting image
-    byte* d_pixels;		  //!< Store the pixel of the resulting image
+    byte* d_pixels;		          //!< Store the pixel of the resulting image
     DataSource* d_data;           //!< Store a pointer to the input data
     ImageContext* d_imageContext; //!< Store a pointer to the image context 
     ImageLoader* d_imageLoader;   //!< Store a pointer to the image loader used

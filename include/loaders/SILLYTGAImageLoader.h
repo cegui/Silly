@@ -49,11 +49,12 @@ public:
     ~TGAImageLoader();
     
 
-    ImageContext* loadHeader(size_t& width, size_t& height, PixelFormat& formatSource, DataSource* data);
+    ImageContext* loadHeader(PixelFormat& formatSource, DataSource* data);
 
     bool loadImageData(PixelFormat resultFormat, 
-                     DataSource* data, 
-                     ImageContext* context);
+                       PixelOrigin origin, 
+                       DataSource* data, 
+                       ImageContext* context);
 
     void destroyContext(ImageContext* context);
 

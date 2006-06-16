@@ -37,8 +37,48 @@
 #include "SILLYImageContext.icpp"
 #undef inline
 #endif
+#include <cstring>
 // Start section of namespace SILLY
 namespace SILLY
 { 
+
+bool ImageContext::flip()
+{
+    size_t depth;
+    switch(d_format)
+    {
+    case PF_A1B5G5R5:
+        depth = 2;
+        break;
+    case PF_RGB:
+        depth = 3;
+        break;
+    case PF_RGBA:
+        depth = 4;
+        break;
+    }
+       
+    // Do the flipping 
+    byte *p1,*p2,*tmp;      // tmp pointers
+    size_t len = d_width * depth; // length of horizontal line in bytes
+    tmp = new byte[len];    // Allocate a temporary line
+    if ( !tmp )
+        return false;
+    
+    size_t y , y2;
+    y2 = d_height - 1;
+    for ( y = 0; y < d_height >> 1; y++ )
+    {
+        p1 = (d_pixels) + len * y;
+        p2 = (d_pixels) + len * y2;
+        memcpy( tmp, p1, len );
+        memcpy( p1, p2, len );
+        memcpy( p2, tmp, len );
+        y2--;
+    }
+    delete [] tmp;
+    return true;
+}
+
 
 } // End section of namespace SILLY 

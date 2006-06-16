@@ -61,18 +61,37 @@ public:
     */
     void setNextPixel(byte red, byte green, byte bleu, byte alpha);
 
+    size_t getWidth() const;
+    size_t getHeight() const;
+    PixelFormat getPixelFormat() const;
+
+
 protected:
+    /*!
+      \brief 
+      Flip pixel ordering 
+
+      \return true on success false otherwise 
+    */
+    bool  flip();
     /*! 
       \brief 
       Constructor
-    */
-    ImageContext();
 
-    
+      \param width the width of the image 
+
+      \param height the height of the image 
+    */
+    ImageContext(size_t width, size_t height);
+
+private:    
     byte* d_pixels;
     size_t d_length;
+    size_t d_width;
+    size_t d_height;
     size_t d_currentOffset;
     PixelFormat d_format;
+
     // Disabled operation
     ImageContext(ImageContext&);
     ImageContext& operator=(ImageContext&);

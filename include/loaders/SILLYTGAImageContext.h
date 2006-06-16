@@ -42,18 +42,12 @@ namespace SILLY
 class TGAImageContext : public ImageContext 
 {
 public:
-  TGAImageContext();
+  TGAImageContext(size_t width, size_t height);
   ~TGAImageContext();
   
-  bool flipVert(); // Flip the line of the image 
-  
-
-
 private:
   byte d_idLength;
   byte d_imageType;
-  size_t d_width;
-  size_t d_height;
   byte d_depth;
   byte d_description;
 
