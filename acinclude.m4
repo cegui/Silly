@@ -1,12 +1,8 @@
 AC_DEFUN([SILLY_OPT], [
-  silly_with_opt_inline=no
-  silly_with_opt_debug=no
-  silly_with_opt_profile=no
-
   dnl inline
   AC_ARG_ENABLE([inline], 
 	AC_HELP_STRING([--disable-inline], [Disable function inlining]), 
-	[silly_with_opt_inline=$enableval], [silly_with_opt_inline=no])
+	[silly_with_opt_inline=$enableval], [silly_with_opt_inline=yes])
   AC_MSG_CHECKING([whether to enable source inlining])
   if test "x$silly_with_opt_inline" = "xyes" 
   then 
@@ -26,14 +22,14 @@ AC_DEFUN([SILLY_OPT], [
      AC_DEFINE_UNQUOTED([SILLY_OPT_DEBUG], [1], 
 			[Set to 1 if the source code is build in debug mode], 
 			[include/SILLYOptions.h])
-     CFLAGS="$CLFAGS -g3 -Wall -W" 
+     CFLAGS="$CLFAGS -g3 -Wall" 
   fi
   AM_CONDITIONAL(SILLY_OPT_INLINE, test "x$silly_with_opt_debug" = "xyes")
   AC_MSG_RESULT($silly_with_opt_debug)
   dnl profile 
   AC_ARG_ENABLE([profile], 
  	AC_HELP_STRING([--enable-profile], [Build with profiling information]), 
-	[silly_with_opt_profile=$enableval], [silly_with_opt_inline=no])
+	[silly_with_opt_profile=$enableval], [silly_with_opt_profile=no])
   AC_MSG_CHECKING([wether to enable profiling information])
   if test "x$silly_with_opt_profile" = "xyes"
   then 

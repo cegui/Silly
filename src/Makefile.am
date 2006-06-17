@@ -3,6 +3,7 @@ INCLUDES=-I$(top_srcdir)/include
 lib_LTLIBRARIES = libSILLY.la
 libSILLY_la_CXXFLAGS= 
 libSILLY_la_LIBADD=
+libSILLY_la_LDFLAGS= -version-info @SILLY_VERSION_INFO@
 libSILLY_la_SOURCES= \
   SILLYDataSource.cpp \
   SILLYMemoryDataSource.cpp \

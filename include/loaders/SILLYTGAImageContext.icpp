@@ -31,12 +31,12 @@
 // Start of section namespace SILLY
 namespace SILLY
 {
-TGAImageContext::TGAImageContext(size_t width, size_t height)
+inline TGAImageContext::TGAImageContext(size_t width, size_t height)
     : ImageContext(width, height)
 {
 }
 
-TGAImageContext::~TGAImageContext()
+inline TGAImageContext::~TGAImageContext()
 {
 }
 
