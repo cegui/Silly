@@ -31,7 +31,7 @@
 #define _SILLYBase_h_ 
 #include <cassert>
 #include <cstddef>
-
+#include "SILLYOptions.h"
 #if defined(_WIN32) || defined(__WIN32__)
 #   undef SILLY_OPT_INLINE // No inlining 
 #   undef SILLY_BE // Little Endian 

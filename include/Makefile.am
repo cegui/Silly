@@ -9,17 +9,14 @@ pkginc_HEADERS = \
   SILLYImageContext.h \
   SILLYImageLoader.h \
   SILLYImageLoaderManager.h \
-  SILLYImage.h 
-
-if SILLY_OPT_INLINE
-pkginc_HEADERS += \
+  SILLYImage.h \
   SILLYDataSource.icpp \
   SILLYMemoryDataSource.icpp \
   SILLYImageContext.icpp \
   SILLYImageLoader.icpp \
   SILLYImageLoaderManager.icpp \
   SILLYImage.icpp 
-endif 
+
 
 noinst_HEADERS = \
   loaders/SILLYTGAImageContext.h \
