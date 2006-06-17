@@ -44,6 +44,7 @@
 namespace SILLY
 {
 JPGImageLoader::JPGImageLoader()
+    : ImageLoader("JPG Image Loader based on jpeg-6b")
 {
 }
 
@@ -86,8 +87,7 @@ ImageContext* JPGImageLoader::loadHeader(PixelFormat& formatSource, DataSource* 
     return jpg;
 }
 
-bool JPGImageLoader::loadImageData(PixelFormat resultFormat,
-                                   PixelOrigin origin, 
+bool JPGImageLoader::loadImageData(PixelOrigin origin, 
                                    DataSource* data, 
                                    ImageContext* context)
 {
@@ -145,7 +145,7 @@ bool JPGImageLoader::loadImageData(PixelFormat resultFormat,
     jpeg_finish_decompress(& jpg->cinfo);
     
     if (origin == PO_BOTTOM_LEFT)
-        return jpg->flip();
+        return jpg->flipVertically();
     return true;
 }
 

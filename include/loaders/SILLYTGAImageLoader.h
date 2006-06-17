@@ -46,8 +46,7 @@ public:
     TGAImageLoader();
     ~TGAImageLoader();
     ImageContext* loadHeader(PixelFormat& formatSource, DataSource* data);
-    bool loadImageData(PixelFormat resultFormat, 
-                       PixelOrigin origin, 
+    bool loadImageData(PixelOrigin origin, 
                        DataSource* data, 
                        ImageContext* context);
 private:

@@ -73,7 +73,12 @@ inline Image::~Image()
     if (d_imageLoader)
         d_imageLoader->destroyContext(d_imageContext);
 }
-
+inline const char* Image::getLoaderIdentifierString() const
+{
+    if (d_imageLoader)
+        return d_imageLoader->getIdentifierString();
+    return 0;
+}
 
 } // End of section namespace SILLY
 

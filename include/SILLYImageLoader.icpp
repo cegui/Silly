@@ -31,9 +31,16 @@
 // Start of section namespace SILLY
 namespace SILLY
 {
-
+inline ImageLoader::ImageLoader(const char* name)
+    : d_name(name)
+{
+}
 inline ImageLoader::~ImageLoader()
 {	
+}
+inline const char* ImageLoader::getIdentifierString() const
+{
+    return d_name;
 }
 
 } // End of section namespace SILLY

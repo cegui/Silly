@@ -42,7 +42,7 @@
 namespace SILLY
 { 
 
-bool ImageContext::flip()
+bool ImageContext::flipVertically()
 {
     size_t depth;
     switch(d_format)

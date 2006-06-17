@@ -33,7 +33,6 @@
 
 #include "SILLYImageLoader.h"
 #ifndef SILLY_OPT_INLINE
-#warning "Inlining disabled"
 #define inline 
 #include "SILLYImageLoader.icpp"
 #undef inline

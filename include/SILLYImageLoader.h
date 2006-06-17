@@ -39,10 +39,19 @@ class ImageContext;		// Forward declaration
 /*! 
   \brief
     This is an abstract class that define the interface of all image loader 
+
+    In order to add support for new image format one have to inherits 
+    this class and implement all required function. 
 */
 class SILLY_EXPORT ImageLoader
 {
+protected:
+    /*! 
+     \brief Constructor 
+     */
+     ImageLoader(const char* name);
 public:
+        
     /*!
       \brief 
       Destructor 
@@ -66,8 +75,6 @@ public:
       \brief 
       Parse the pixels data of the image and fill the header struct 
 
-      \param resultFormat the expected pixel format 
-
       \param origin the layout of the pixel in the resulting pixel array 
 
       \param data the input of the image data
@@ -76,7 +83,7 @@ public:
       
       \return true on success false on error 
     */
-    virtual bool loadImageData(PixelFormat resultFormat, PixelOrigin origin, DataSource* data, ImageContext* context) = 0;
+    virtual bool loadImageData(PixelOrigin origin, DataSource* data, ImageContext* context) = 0;
     
     /*! 
       \brief 
@@ -85,6 +92,15 @@ public:
       \param context a pointer to the context 
     */
     void destroyContext(ImageContext* context);
+    
+    /*!
+      \brief 
+      Return the name of the loader
+    */ 
+    const char* getIdentifierString() const;
+private:
+    const char* d_name; //!< Store a pointer to the name of the image loader
+
 };
   
 } // End of section namespace SILLY 

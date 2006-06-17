@@ -71,7 +71,7 @@ public:
 
       \return true on success false otherwise 
     */
-    bool  flip();
+    bool  flipVertically();
  protected:
     void setWidth(size_t width);
     

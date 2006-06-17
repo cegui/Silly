@@ -45,10 +45,7 @@ public:
     JPGImageLoader();
     ~JPGImageLoader();
     ImageContext* loadHeader(PixelFormat& header, DataSource* data);
-    bool loadImageData(PixelFormat resultFormat, 
-                       PixelOrigin origin, 
-                       DataSource* data, 
-                       ImageContext* context);
+    bool loadImageData(PixelOrigin origin, DataSource* data, ImageContext* context);
 private:
 };
   

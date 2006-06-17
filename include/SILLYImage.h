@@ -123,7 +123,11 @@ public:
       Get the size of the pixel buffer 
     */
     size_t getPixelsDataSize() const;
-
+    /*! 
+      \brief 
+      Get Image loader identifier string 
+    */
+    const char* getLoaderIdentifierString() const;
 private:
     bool allocate();
 

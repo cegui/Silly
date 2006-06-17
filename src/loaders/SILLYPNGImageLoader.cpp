@@ -73,6 +73,7 @@ void PNG_error_function(png_structp png_ptr,
 
 
 PNGImageLoader::PNGImageLoader()
+    : ImageLoader("PNG Image Loader based on libpng")
 {
 }
 PNGImageLoader::~PNGImageLoader()
@@ -146,8 +147,7 @@ ImageContext* PNGImageLoader::loadHeader(PixelFormat& formatSource, DataSource* 
 }
 
  
-bool PNGImageLoader::loadImageData(PixelFormat resultFormat,
-                                   PixelOrigin origin, 
+bool PNGImageLoader::loadImageData(PixelOrigin origin, 
                                    DataSource* data, 
                                    ImageContext* context)
 {
@@ -195,7 +195,7 @@ bool PNGImageLoader::loadImageData(PixelFormat resultFormat,
         }
     }
     if (origin == PO_BOTTOM_LEFT)
-        return png->flip();
+        return png->flipVertically();
     
     return true;    
 }

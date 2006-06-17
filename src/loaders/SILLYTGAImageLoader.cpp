@@ -49,6 +49,7 @@ namespace SILLY
 {
 
 TGAImageLoader::TGAImageLoader()
+    : ImageLoader("TGA Image loader (builtin)")
 {
 }
 
@@ -122,7 +123,7 @@ ImageContext* TGAImageLoader::loadHeader(PixelFormat& formatSource, DataSource* 
     return context;
 }
 
-bool TGAImageLoader::loadImageData(PixelFormat resultFormat, PixelOrigin origin, DataSource* data, ImageContext* context)
+bool TGAImageLoader::loadImageData(PixelOrigin origin, DataSource* data, ImageContext* context)
 {
     TGAImageContext* tga = static_cast<TGAImageContext*>(context);
     size_t bpp = tga->d_depth;
@@ -297,12 +298,12 @@ bool TGAImageLoader::loadImageData(PixelFormat resultFormat, PixelOrigin origin,
     if ((tga->d_description & 0x10) == 0x10) // Upper Left origin 
     {
         if  (origin == PO_BOTTOM_LEFT)
-            return tga->flip();
+            return tga->flipVertically();
     }
     else 
     {
         if (origin == PO_TOP_LEFT)
-            return tga->flip();
+            return tga->flipVertically();
     }
     return true;
 }

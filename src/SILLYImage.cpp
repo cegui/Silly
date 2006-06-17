@@ -89,7 +89,7 @@ bool Image::loadImageData(PixelFormat resultFormat, PixelOrigin order)
     }
     d_imageContext->setDestination(d_pixels, getWidth() * getHeight() * d_bpp, resultFormat);
 
-    if (! d_imageLoader->loadImageData(resultFormat, order, d_data, d_imageContext))
+    if (! d_imageLoader->loadImageData(order, d_data, d_imageContext))
     {
         delete [] d_pixels;
         return false;
