@@ -31,6 +31,7 @@
 #define _SILLYPNGImageLoader_h_
 #include "SILLYBase.h" 
 #include "SILLYImageLoader.h" 
+#include "SILLYDataSource.h" 
 // Start of section namespace SILLY 
 namespace SILLY
 {

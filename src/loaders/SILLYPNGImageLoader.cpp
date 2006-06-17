@@ -41,61 +41,163 @@
 
 #include "loaders/SILLYPNGImageContext.h" 
 #include <png.h>
-
 // Start section of namespace SILLY
 namespace SILLY
 {
-
-ImageContext* PNGImageContext::loadHeader(PixelFormat& format, DataSource* data)
+void PNG_read_function(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-    // Check PNG Header 
-    if (png_sig_cmp(data->getDataPtr(), 0, 8))
+    PNGImageContext* png = reinterpret_cast<PNGImageContext*>(png_get_io_ptr(png_ptr));
+    int readed = png->read(data, length);
+    if (readed != (int)length)
     {
-        return 0;
+        char buffer[100];
+        png_error(png_ptr, "PNG_read_function error");
     }
-    
-    png_structp png_ptr = png_create_read_struct(
-        PNG_LIBPNG_VER_STRING, 
-        NULL, NULL, NULL);
-    if (png_ptr == 0)
-    {
-        return 0;
-    }
-    png_infop info_ptr = png_create_info_struct(png_ptr);
-    if (info_ptr == 0)
-    {
-        png_destroy_read_struct(&png_ptr, NULL, NULL);
-        return 0;
-    }
-    if (setjmp(png_jmpbuf(png_ptr)))
-    {
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-        return 0;
-    }
-    
-    // Set error function
-    // 0, error, warning
-    png_set_error_fn(png_ptr, 0, 0, 0);
-    //We might need a change here 
-    //DataSource does not maintains any internal state about the progression
-    //of the reading 
-    // TODO create a simple object around DataSource*
-    png_set_read_fn(png_ptr, data, data_read_function);
+}
 
-    png_set_sib_bytes(png_ptr, 8);
-    
-    png_set_read_fn(png_ptr, 
+void PNG_warning_function(png_structp png_ptr, 
+                 png_const_charp error)
+{
+//    printf("PNG Warning: %s\n", error);
+}
 
-    
+void PNG_error_function(png_structp png_ptr, 
+                        png_const_charp error)
+{
+    //  printf("PNG Error: %s\n", error);
+    // copied from libpng's pngerror.cpp
+    jmp_buf buf;
+    memcpy(buf, png_ptr->jmpbuf, sizeof(jmp_buf));
+    longjmp(buf, 1);
+}
 
 
-    PNGImageContext* result = new PNGImageContext(
+PNGImageLoader::PNGImageLoader()
+{
+}
+PNGImageLoader::~PNGImageLoader()
+{
+}
+
+
+ImageContext* PNGImageLoader::loadHeader(PixelFormat& formatSource, DataSource* data)
+{
+    PNGImageContext* png = new PNGImageContext(data);
+    if (!png)
+    {    
+        return 0;
+        
+    }
+    // Prepare png loading 
+    png->d_png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
+    if (png->d_png_ptr == 0)
+    {
+        delete png;
+        return 0;
+    }
+    png->d_info_ptr = png_create_info_struct(png->d_png_ptr);
+    if (png->d_info_ptr == 0)
+    {
+        delete png;
+        return 0;
+    }
+    if (setjmp(png_jmpbuf(png->d_png_ptr))) 
+    {
+        delete png;
+        return 0;
+    }
+    png_set_error_fn(png->d_png_ptr, 0, PNG_error_function, PNG_warning_function);
+    png_set_read_fn(png->d_png_ptr, png, PNG_read_function);
+    //png_set_sig_bytes(png->d_png_ptr, 8);
     
-    
-    
-    
+
+
+    // Read header Check whether PNG can depaletize transparently or not
+    int png_transform = PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_EXPAND;
+    //printf("Start reading png\n");
+    png_read_png(png->d_png_ptr, png->d_info_ptr, png_transform, 0);
+    png->setImageSize();
+    png->d_bit_depth = png_get_bit_depth(png->d_png_ptr, png->d_info_ptr);
+    png->d_num_channels = png_get_channels(png->d_png_ptr, png->d_info_ptr);
+    //printf("PNG Info: width: %d height: %d bpp: %d channels: %d\n", png->getWidth(), png->getHeight(), png->d_bit_depth, png->d_num_channels);
+    if (png->d_bit_depth == 8)
+    {
+        if (png->d_num_channels == 4)
+        {    
+            formatSource = PF_RGBA;
+        }
+        else if (png->d_num_channels == 3)
+        {   
+            formatSource = PF_RGB;
+        }
+        else 
+        {
+            delete png;
+            return 0;
+        }
+    }
+    // Paletized or grayscale not yet handled 
+    else 
+    {
+        delete png;
+        return 0;
+    }
+    return png;
 }
 
  
+bool PNGImageLoader::loadImageData(PixelFormat resultFormat,
+                                   PixelOrigin origin, 
+                                   DataSource* data, 
+                                   ImageContext* context)
+{
+    PNGImageContext* png = static_cast<PNGImageContext*>(context);
+    byte red;
+    byte green;
+    byte blue;
+    byte alpha;
+    size_t width = png->getWidth();
+    size_t height = png->getHeight();
+    png_bytepp row_pointers = png_get_rows(png->d_png_ptr, png->d_info_ptr);
+    if (png->d_bit_depth == 8)
+    {
+        // Read RGBA 
+        if (png->d_num_channels == 4)
+        {
+            for (size_t j = 0 ; j < height ; ++j)
+            {
+                for(size_t i = 0 ; i < width ; ++i)
+                {
+                    size_t pixel_offset = 4 * i;
+                    red   = *(row_pointers[j] + pixel_offset);
+                    green = *(row_pointers[j] + pixel_offset + 1);
+                    blue  = *(row_pointers[j] + pixel_offset + 2);
+                    alpha = *(row_pointers[j] + pixel_offset + 3);
+                    png->setNextPixel(red, green, blue, alpha);
+                }
+            }
+        }
+        else if (png->d_num_channels == 3)
+        {
+            alpha = 0xff;
+            for (size_t j = 0 ; j < height ; ++j)
+            {
+                for(size_t i = 0 ; i < width ; ++i)
+                {
+                    size_t pixel_offset = 3 * i;
+                    red   = *(row_pointers[j] + pixel_offset);
+                    green = *(row_pointers[j] + pixel_offset + 1);
+                    blue  = *(row_pointers[j] + pixel_offset + 2);
+                    png->setNextPixel(red, green, blue, alpha);
+                }
+            }
+
+        }
+    }
+    if (origin == PO_BOTTOM_LEFT)
+        return png->flip();
+    
+    return true;    
+}
 
 } // End section of namespace SILLY 

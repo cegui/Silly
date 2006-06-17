@@ -116,7 +116,6 @@ void JPGImageContext::setImageSize()
 {
     setWidth(cinfo.output_width);
     setHeight(cinfo.output_height);
-    
 }
 
 } // End section of namespace SILLY 

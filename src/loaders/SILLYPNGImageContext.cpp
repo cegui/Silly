@@ -38,11 +38,45 @@
 #include "loaders/SILLYPNGImageContext.icpp"
 #undef inline
 #endif
+#include <string.h>
 
 // Start section of namespace SILLY
 namespace SILLY
 {
+int PNGImageContext::read(png_bytep data, png_size_t length)
+{
+    //printf("PNG Read: %d bytes offset: %d, size %d\n", 
+    //       length, d_offset, d_data->getSize());
+    
+    if (d_offset + length > d_data->getSize())
+        return -1;
+    memcpy(data, d_data->getDataPtr() + d_offset, length);
+    d_offset += length;
+    return length;
+}
 
- 
+  
+PNGImageContext::PNGImageContext(DataSource* data)
+    : ImageContext(0,0), d_offset(0), d_data(data), d_png_ptr(0), d_info_ptr(0)
+{
+    
+}
+
+PNGImageContext::~PNGImageContext()
+{
+    if (d_info_ptr)
+        png_destroy_read_struct(&d_png_ptr, &d_info_ptr, 0);    
+    if (d_png_ptr)
+        png_destroy_read_struct(&d_png_ptr, 0, 0);    
+}
+
+
+void PNGImageContext::setImageSize()
+{
+    setWidth(png_get_image_width(d_png_ptr, d_info_ptr));
+    setHeight(png_get_image_height(d_png_ptr, d_info_ptr));
+    
+}
+
 
 } // End section of namespace SILLY 

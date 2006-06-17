@@ -64,7 +64,6 @@ ImageContext* JPGImageLoader::loadHeader(PixelFormat& formatSource, DataSource* 
         delete jpg;
         return 0;
     }
-    printf("Parse JPG header\n");
     jpeg_read_header(&(jpg->cinfo), TRUE);
     if (! jpeg_start_decompress(&(jpg->cinfo)))
     {
@@ -80,7 +79,8 @@ ImageContext* JPGImageLoader::loadHeader(PixelFormat& formatSource, DataSource* 
         delete jpg;
         return 0;
     }
-    printf("Image info: size: %dx%d - bpp: %d\n",  jpg->cinfo.output_width, jpg->cinfo.output_height, jpg->cinfo.output_components);
+    formatSource  = PF_RGB; // It's not true but we handle both the same way
+    //printf("Image info: size: %dx%d - bpp: %d\n",  jpg->cinfo.output_width, jpg->cinfo.output_height, jpg->cinfo.output_components);
     
     jpg->setImageSize();
     return jpg;

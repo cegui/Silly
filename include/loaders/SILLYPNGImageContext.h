@@ -31,6 +31,8 @@
 #define _SILLYPNGImageContext_h_
 #include "SILLYBase.h" 
 #include "SILLYImageContext.h" 
+#include "SILLYDataSource.h" 
+#include <png.h> 
 // Start of section namespace SILLY 
 namespace SILLY
 {
@@ -40,14 +42,32 @@ namespace SILLY
     Image Context for PNG Image Loader
 */
   
-  class SILLY_EXPORT PNGImageContext : public ImageContext 
+class SILLY_EXPORT PNGImageContext : public ImageContext 
 {
 public:
-  PNGImageContext();
-  ~PNGImageContext();
+    PNGImageContext(DataSource* data);
+    ~PNGImageContext();
+    
+    int read(png_bytep data, png_size_t length);
   
+    
+    
 private:
-
+    void setImageSize();
+    
+    size_t d_offset;
+    
+    DataSource* d_data;
+    
+    png_structp d_png_ptr;
+ 
+    png_infop d_info_ptr;
+  
+    size_t d_bit_depth;
+    size_t d_num_channels;
+    
+    
+    friend class PNGImageLoader;
 };
   
   

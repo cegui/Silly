@@ -46,6 +46,11 @@ namespace SILLY
 /*! 
   \brief
     Image Context for JPG image loader
+
+    Most of the code of this loader is taken from Corona and adapted
+    to our image loading framework
+ 
+    Multiple loading is not handle yet. 
 */
   
 class JPGImageContext : public ImageContext
