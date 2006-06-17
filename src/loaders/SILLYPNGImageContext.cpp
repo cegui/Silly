@@ -31,11 +31,11 @@
 #include <config.h>
 #endif
 
-#include "SILLYPNGImageContext.h"
+#include "loaders/SILLYPNGImageContext.h"
 
 #ifndef SILLY_OPT_INLINE
 #define inline 
-#include "SILLYPNGImageContext.icpp"
+#include "loaders/SILLYPNGImageContext.icpp"
 #undef inline
 #endif
 

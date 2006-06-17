@@ -34,25 +34,24 @@
 // Start of section namespace SILLY 
 namespace SILLY
 {
-  
 /*! 
   \brief
     Loader for PNG Image
 */
-  
 class PNGImageLoader : public ImageLoader
 {
 public:
-  PNGImageLoader();
-  ~PNGImageLoader();
-  
-  ImageContext* parseHeader(ImageHeader& header, DataSource* data);
-
-  bool parsePixels(RawContainer& result, PixelFormat resultFormat, DataSource* data, ImageContext* context);
-
-  void destroyContext(ImageContext* context);
-
- private:
+    PNGImageLoader();
+    
+    ~PNGImageLoader();
+    
+    ImageContext* loadHeader(PixelFormat& formatSource, DataSource* data);
+    
+    bool loadImageData(PixelFormat resultFormat, 
+                       PixelOrigin origin, 
+                       DataSource* data, 
+                       ImageContext* context);
+private:
 
 };
   

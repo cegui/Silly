@@ -31,17 +31,126 @@
 #include <config.h>
 #endif
 
-#include "SILLYJPGImageLoader.h"
+#include "loaders/SILLYJPGImageLoader.h"
 
 #ifndef SILLY_OPT_INLINE
 #define inline 
-#include "SILLYJPGImageLoader.icpp"
+#include "loaders/SILLYJPGImageLoader.icpp"
 #undef inline
 #endif
+#include "loaders/SILLYJPGImageContext.h" 
 
 // Start section of namespace SILLY
 namespace SILLY
 {
+JPGImageLoader::JPGImageLoader()
+{
+}
+
+JPGImageLoader::~JPGImageLoader()
+{
+}
+
+
+ImageContext* JPGImageLoader::loadHeader(PixelFormat& formatSource, DataSource* data)
+{
+    JPGImageContext* jpg = new JPGImageContext;
+    jpg->d_source = data;
+    
+    if (! jpg)
+        return 0;
+    if (setjmp(jpg->setjmp_buffer))
+    {
+        delete jpg;
+        return 0;
+    }
+    printf("Parse JPG header\n");
+    jpeg_read_header(&(jpg->cinfo), TRUE);
+    if (! jpeg_start_decompress(&(jpg->cinfo)))
+    {
+        delete jpg;
+        return 0;
+    }
+        
+    
+    if (jpg->cinfo.output_components != 1 && jpg->cinfo.output_components != 3)
+    {
+        printf("JPG unsupported bpp: %d\n", jpg->cinfo.output_components );
+        jpeg_finish_decompress(& jpg->cinfo);
+        delete jpg;
+        return 0;
+    }
+    printf("Image info: size: %dx%d - bpp: %d\n",  jpg->cinfo.output_width, jpg->cinfo.output_height, jpg->cinfo.output_components);
+    
+    jpg->setImageSize();
+    return jpg;
+}
+
+bool JPGImageLoader::loadImageData(PixelFormat resultFormat,
+                                   PixelOrigin origin, 
+                                   DataSource* data, 
+                                   ImageContext* context)
+{
+    JPGImageContext* jpg = static_cast<JPGImageContext*>(context);
+    
+    // Allocate a buffer 
+    int row_stride = jpg->getWidth() * jpg->cinfo.output_components;
+    JSAMPARRAY buffer = (* jpg->cinfo.mem->alloc_sarray)(
+        (j_common_ptr)(& jpg->cinfo), 
+        JPOOL_IMAGE, 
+        row_stride, 
+        1);
+    bool finished = true;
+    size_t height = jpg->getHeight();
+    size_t width = jpg->getWidth();
+    
+    
+    while(jpg->cinfo.output_scanline < height)
+    {
+        int num_rows = jpeg_read_scanlines(& jpg->cinfo, buffer, 1);
+        if (num_rows != 1)
+        {
+            jpeg_finish_decompress(& jpg->cinfo);
+            return false;
+        }
+        byte red;
+        byte green;
+        byte blue;
+        const byte alpha = 0xff;
+        byte* in = (byte*)(*buffer);
+        // Grayscale image 
+        if (jpg->cinfo.output_components == 1)
+        {
+            for(size_t i  = 0 ; i < width * num_rows ; ++i)
+            {
+                red = *in;
+                green = *in;
+                blue = *in;
+                jpg->setNextPixel(red, green, blue, alpha);
+                in += 1;
+            }
+        }
+        // RGB image 
+        else 
+        {
+            for(size_t i  = 0 ; i < width * num_rows ; ++i)
+            {
+                red = *(in++);
+                green = *(in++);
+                blue = *(in++);
+                jpg->setNextPixel(red, green, blue, alpha);
+            }
+        }
+    }
+    jpeg_finish_decompress(& jpg->cinfo);
+    
+    if (origin == PO_BOTTOM_LEFT)
+        return jpg->flip();
+    return true;
+}
+
+
+                                         
 
  
 

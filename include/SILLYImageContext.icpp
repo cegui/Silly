@@ -81,11 +81,20 @@ inline size_t ImageContext::getWidth() const
     return d_width;
 }
 
+inline void ImageContext::setWidth(size_t width) 
+{
+    d_width = width;
+}
+
 inline size_t ImageContext::getHeight() const
 {
     return d_height;
 }
 
+inline void ImageContext::setHeight(size_t height)
+{
+    d_height = height;
+}
 inline PixelFormat ImageContext::getPixelFormat() const
 {
 	return d_format;

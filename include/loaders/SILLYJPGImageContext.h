@@ -31,7 +31,15 @@
 #define _SILLYJPGImageContext_h_
 #include "SILLYBase.h" 
 #include "SILLYImageContext.h" 
+#include "SILLYDataSource.h" 
 // Start of section namespace SILLY 
+#include <setjmp.h>
+#include <stdio.h>
+#include <string.h>
+extern "C" 
+{
+#include <jpeglib.h>
+}
 namespace SILLY
 {
 
@@ -43,11 +51,18 @@ namespace SILLY
 class JPGImageContext : public ImageContext
 {
 public:
-  JPGImageContext();
-  ~JPGImageContext();
-  
-private:
+    JPGImageContext();
+    ~JPGImageContext();
 
+    void setImageSize();
+    
+    
+    jpeg_source_mgr src_mgr;
+    jpeg_decompress_struct cinfo;
+    
+    jpeg_error_mgr d_error_mgr;
+    jmp_buf setjmp_buffer;
+    DataSource* d_source;
 };
   
   

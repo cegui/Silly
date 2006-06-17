@@ -31,17 +31,70 @@
 #include <config.h>
 #endif
 
-#include "SILLYPNGImageLoader.h"
+#include "loaders/SILLYPNGImageLoader.h"
 
 #ifndef SILLY_OPT_INLINE
 #define inline 
-#include "SILLYPNGImageLoader.icpp"
+#include "loaders/SILLYPNGImageLoader.icpp"
 #undef inline
 #endif
+
+#include "loaders/SILLYPNGImageContext.h" 
+#include <png.h>
 
 // Start section of namespace SILLY
 namespace SILLY
 {
+
+ImageContext* PNGImageContext::loadHeader(PixelFormat& format, DataSource* data)
+{
+    // Check PNG Header 
+    if (png_sig_cmp(data->getDataPtr(), 0, 8))
+    {
+        return 0;
+    }
+    
+    png_structp png_ptr = png_create_read_struct(
+        PNG_LIBPNG_VER_STRING, 
+        NULL, NULL, NULL);
+    if (png_ptr == 0)
+    {
+        return 0;
+    }
+    png_infop info_ptr = png_create_info_struct(png_ptr);
+    if (info_ptr == 0)
+    {
+        png_destroy_read_struct(&png_ptr, NULL, NULL);
+        return 0;
+    }
+    if (setjmp(png_jmpbuf(png_ptr)))
+    {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        return 0;
+    }
+    
+    // Set error function
+    // 0, error, warning
+    png_set_error_fn(png_ptr, 0, 0, 0);
+    //We might need a change here 
+    //DataSource does not maintains any internal state about the progression
+    //of the reading 
+    // TODO create a simple object around DataSource*
+    png_set_read_fn(png_ptr, data, data_read_function);
+
+    png_set_sib_bytes(png_ptr, 8);
+    
+    png_set_read_fn(png_ptr, 
+
+    
+
+
+    PNGImageContext* result = new PNGImageContext(
+    
+    
+    
+    
+}
 
  
 

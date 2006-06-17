@@ -64,9 +64,7 @@ public:
     size_t getWidth() const;
     size_t getHeight() const;
     PixelFormat getPixelFormat() const;
-
-
-protected:
+    
     /*!
       \brief 
       Flip pixel ordering 
@@ -74,6 +72,11 @@ protected:
       \return true on success false otherwise 
     */
     bool  flip();
+ protected:
+    void setWidth(size_t width);
+    
+    void setHeight(size_t height);
+      
     /*! 
       \brief 
       Constructor

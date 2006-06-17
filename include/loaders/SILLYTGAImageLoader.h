@@ -43,21 +43,13 @@ class TGAImageContext;
 class TGAImageLoader : public ImageLoader 
 {
 public:
-
     TGAImageLoader();
-    
     ~TGAImageLoader();
-    
-
     ImageContext* loadHeader(PixelFormat& formatSource, DataSource* data);
-
     bool loadImageData(PixelFormat resultFormat, 
                        PixelOrigin origin, 
                        DataSource* data, 
                        ImageContext* context);
-
-    void destroyContext(ImageContext* context);
-
 private:
 
 };

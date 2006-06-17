@@ -38,16 +38,17 @@ namespace SILLY
 /*! 
   \brief
     Loader class for JPG Image
-*/
-  
+*/ 
 class JPGImageLoader : public ImageLoader
 {
 public:
-  JPGImageLoader();
-  ~JPGImageLoader();
-  ImageContext* parseHeader(ImageHeader& header, DataSource* data);
-  bool parsePixels(RawContainer& result, PixelFormat resultFormat, DataSource* data, ImageContext* context);
-  void destroyContext(ImageContext* context);
+    JPGImageLoader();
+    ~JPGImageLoader();
+    ImageContext* loadHeader(PixelFormat& header, DataSource* data);
+    bool loadImageData(PixelFormat resultFormat, 
+                       PixelOrigin origin, 
+                       DataSource* data, 
+                       ImageContext* context);
 private:
 };
   

@@ -55,12 +55,27 @@ AC_DEFUN([SILLY_OPT_SUM], [
 ])
 
 AC_DEFUN([SILLY_JPG], [
-  silly_with_jpg=no
-  if test "x$silly_with_jpg" = "xyes"
-  then
-    AC_DEFINE_UNQUOTED([SILLY_HAVE_JPG], 
-                       [1], 
-                       [Defined to 1 if JPG support is enabled])
+  AC_ARG_ENABLE([jpeg], 
+    AC_HELP_STRING([--disable-jpeg], [Disable jpeg support]), 
+    [silly_with_jpg=$enableval], [silly_with_jpg=yes])
+  if test x$silly_with_jpg = xyes ; then 
+    AC_CHECK_LIB([jpeg], [jpeg_read_header], [silly_with_jpg_lib=yes], [silly_with_jpg_lib=no])
+    AC_CHECK_HEADER([jpeglib.h], [silly_with_jpg_header=yes], [silly_with_jpg_header=no])
+    if test "x$silly_with_jpg_lib" = "xyes" -a "x$silly_with_jpg_header" = "xyes" 
+    then
+        AC_DEFINE_UNQUOTED([SILLY_HAVE_JPG], 
+                           [1], 
+                           [Defined to 1 if JPG support is enabled])
+        JPG_LIBS=-ljpeg
+        AC_MSG_NOTICE([Enable jpg image loading support])
+        silly_with_jpg=yes
+    else 
+        AC_MSG_NOTICE([Disable jpg image loading support])
+        silly_with_jpg=no
+    fi
+  else 
+     AC_MSG_NOTICE([Disable jpg image loading support])
+     silly_with_jpg=no
   fi 
   AM_CONDITIONAL(SILLY_HAVE_JPG, test "x$silly_with_jpg" = "xyes")
   AC_SUBST(JPG_CFLAGS)
@@ -72,12 +87,24 @@ AC_DEFUN([SILLY_JPG_SUM], [
 ])
 
 AC_DEFUN([SILLY_PNG], [
-  silly_with_png=no
-  if test "x$silly_with_png" = "xyes"
-  then
-    AC_DEFINE_UNQUOTED([SILLY_HAVE_PNG], 
-                       [1], 
-                       [Defined to 1 if PNG support is enabled])
+  AC_ARG_ENABLE([png], 
+    AC_HELP_STRING([--disable-png], [Disable png support]), 
+    [silly_with_png=$enableval], [silly_with_png=yes])
+  if test x$silly_with_png = xyes ; then 
+    PKG_CHECK_MODULES([PNG], [libpng >= 1.2.10], 
+        [silly_with_png=yes], 
+        [silly_with_libpng=no])
+    if test "x$silly_with_png" = "xyes"
+    then
+        AC_DEFINE_UNQUOTED([SILLY_HAVE_PNG], 
+                           [1], 
+                           [Defined to 1 if PNG support is enabled])
+        AC_MSG_NOTICE([Enable png image format loading])
+    else 
+        AC_MSG_NOTICE([Disable png image format loading])
+    fi
+  else 
+    AC_MSG_NOTICE([Disable png image format loading])
   fi
   AM_CONDITIONAL(SILLY_HAVE_PNG, test "x$silly_with_png" = "xyes")
   AC_SUBST(PNG_CFLAGS)
