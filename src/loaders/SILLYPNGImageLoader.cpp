@@ -50,7 +50,6 @@ void PNG_read_function(png_structp png_ptr, png_bytep data, png_size_t length)
     int readed = png->read(data, length);
     if (readed != (int)length)
     {
-        char buffer[100];
         png_error(png_ptr, "PNG_read_function error");
     }
 }

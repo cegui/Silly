@@ -1,3 +1,6 @@
+--
+-- SILLY premake configuration script
+--
 project.name = "SILLY"
 project.bindir = "bin"
 project.libdir = "lib"
@@ -19,19 +22,35 @@ package.files = {
 package.includepaths = {
     "include",
     "include/loaders",
+    "../cegui_mk2/dependencies/include",
+}
+
+package.libpaths = {
+    "../cegui_mk2/dependencies/lib",
 }
 
 -- windows stuff
-package.defines = {"WIN32", "_WIN32", "__WIN32__", "SILLY_EXPORTS"}
+package.defines = {
+    "WIN32","_WIN32", "__WIN32__",
+    "SILLY_EXPORTS",
+    "SILLY_HAVE_JPG",
+    "SILLY_HAVE_PNG",
+    --"SILLY_OPT_INLINE",
+    --"SILLY_OPT_PROFILE",
+}
+
 
 --
 -- Debug
 --
 
     local debug = package.config["Debug"]
-    debug.defines = { "DEBUG", "_DEBUG" }
+    debug.defines = { "DEBUG", "_DEBUG", "SILLY_OPT_DEBUG",}
     debug.target = "SILLY_d"
     debug.links = {
+        "jpeg6b_d",
+        "libpngd",
+        "zlibd",
     }
 
 --
@@ -46,4 +65,7 @@ package.defines = {"WIN32", "_WIN32", "__WIN32__", "SILLY_EXPORTS"}
         "optimize-speed"
     }
     release.links = {
+        "jpeg6b",
+        "libpng",
+        "zlib",
     }
