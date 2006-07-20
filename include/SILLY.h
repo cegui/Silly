@@ -66,7 +66,7 @@
    // Create the image object 
    SILLY::Image img(mds);
    // Load the image header 
-   if (!img.loadHeader())
+   if (!img.loadImageHeader())
    {
       // It's an error, the data does not corresponds to an image 
       // or the image data are not supported by SILLY 
@@ -113,6 +113,7 @@ namespace SILLY
 
 #include "SILLYBase.h"
 #include "SILLYDataSource.h" 
+#include "SILLYFileDataSource.h" 
 #include "SILLYMemoryDataSource.h" 
 #include "SILLYImageLoader.h"
 #include "SILLYImageContext.h" 

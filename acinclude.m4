@@ -1,3 +1,54 @@
+AC_DEFUN([SILLY_CHECK_ZLIB], [
+dnl save environment 
+silly_zlib_save_CPPFLAGS="$CPPFLAGS"
+silly_zlib_save_LDFLAGS="$LDFLAGS"
+AC_LANG_PUSH(C)
+
+dnl define search path 
+silly_zlib_search="/usr/local /usr"
+AC_ARG_WITH([zlib],
+    AC_HELP_STRING([--with-zlib=DIR], [root directory path of zlib installation]), 
+	[if test "$withval" != no ; then
+  		silly_zlib_search="$withval $zlib_search"
+  	fi], 
+	[])
+
+dnl search in all path 
+HAVE_ZLIB=no
+for dir in $silly_zlib_search  
+do 
+	if  test "$HAVE_ZLIB"  = "no" ; then 
+		silly_zlib_home="$dir"
+		silly_zlib_cppflags="-I$silly_zlib_home/include" 
+		silly_zlib_ldflags="-L$silly_zlib_home/lib" 
+	  	if test -f "${silly_zlib_home}/include/zlib.h" ; then 
+			CPPFLAGS="$silly_zlib_cppflags $silly_zlib_save_CPPFLAGS"
+			LDFALGS="$silly_zlib_ldflags $silly_zlib_save_LDFLAGS"
+	    		AC_CHECK_HEADER(zlib.h, [silly_zlib_cv_zlib_h=yes], [silly_zlib_cv_zlib_h=no])
+			AC_CHECK_LIB(z, inflateEnd, [silly_zlib_cv_libz=yes], [silly_zlib_cv_libz=no])
+			if  test "$silly_zlib_cv_libz" = "yes" -a "$silly_zlib_cv_zlib_h" = "yes" ; then 
+				HAVE_ZLIB=yes
+				ZLIB_CFLAGS="$silly_zlib_cflags"
+				ZLIB_LIBS="$silly_zlib_ldflags -lz"
+			fi
+		fi
+	fi
+done
+dnl if found update env 
+if test "$HAVE_ZLIB" = "yes" ; then 
+	AC_DEFINE_UNQUOTED([HAVE_ZLIB], [1], [zlib is available])
+	AC_SUBST(HAVE_ZLIB)
+	AC_SUBST(ZLIB_CFLAGS)
+	AC_SUBST(ZLIB_LIBS)
+fi
+dnl restore previous environment 
+AC_LANG_POP(C)
+CPPFLAGS="$silly_zlib_save_CPPFLAGS"
+LDFLAGS="$silly_zlib_save_LDFLAGS"
+])
+
+
+
 AC_DEFUN([SILLY_OPT], [
   dnl inline
   AC_ARG_ENABLE([inline], 
@@ -87,24 +138,32 @@ AC_DEFUN([SILLY_PNG], [
     AC_HELP_STRING([--disable-png], [Disable png support]), 
     [silly_with_png=$enableval], [silly_with_png=yes])
   if test x$silly_with_png = xyes ; then 
-    PKG_CHECK_MODULES([PNG], [libpng >= 1.2.10], 
-        [silly_with_png=yes], 
-        [silly_with_libpng=no])
-    if test "x$silly_with_png" = "xyes"
-    then
-        AC_DEFINE_UNQUOTED([SILLY_HAVE_PNG], 
-                           [1], 
-                           [Defined to 1 if PNG support is enabled])
-        AC_MSG_NOTICE([Enable png image format loading])
+    SILLY_CHECK_ZLIB()
+    if test "x$HAVE_ZLIB" = "xyes" ;
+    then 
+        PKG_CHECK_MODULES([PNG], [libpng >= 1.2.10], 
+            [silly_with_png=yes], 
+            [silly_with_libpng=no])
+
+        if test "x$silly_with_png" = "xyes"
+        then
+            AC_DEFINE_UNQUOTED([SILLY_HAVE_PNG], 
+                               [1], 
+                               [Defined to 1 if PNG support is enabled])
+            AC_MSG_NOTICE([Enable png image format loading])
+        else 
+            AC_MSG_NOTICE([Disable png image format loading])
+        fi
     else 
         AC_MSG_NOTICE([Disable png image format loading])
     fi
-  else 
-    AC_MSG_NOTICE([Disable png image format loading])
-  fi
-  AM_CONDITIONAL(SILLY_HAVE_PNG, test "x$silly_with_png" = "xyes")
-  AC_SUBST(PNG_CFLAGS)
-  AC_SUBST(PNG_LIBS)
+    AM_CONDITIONAL(SILLY_HAVE_PNG, test "x$silly_with_png" = "xyes")
+    PNG_CFLAGS="$PNG_CFLAGS $ZLIB_CFLAGS"
+    PNG_LIBS="$PNG_LIBS $ZLIB_LIBS" 
+    AC_SUBST(PNG_CFLAGS)
+    AC_SUBST(PNG_LIBS)
+    
+  fi 
 ])
 
 AC_DEFUN([SILLY_PNG_SUM], [

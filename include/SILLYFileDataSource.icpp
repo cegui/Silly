@@ -1,9 +1,9 @@
 /***********************************************************************
-    Filename:   SILLYMemoryDataSource.icpp 
-    created:    10 Jun 2006
+    filename:   SILLYFileDataSource.icpp 
+    created:    20 Jul 2006
     author:     Olivier Delannoy
 
-    purpose:    Inline function definition for MemoryDataSource class  
+    purpose:    Inline function definition for the FileDataSource class   
 *************************************************************************/
 /***************************************************************************
  *   Copyright (C) 2004 - 2006 Paul D Turner & The CEGUI Development Team
@@ -31,16 +31,20 @@
 // Start of section namespace SILLY
 namespace SILLY
 {
+inline bool FileDataSource::isValid() const 
+{
+    return d_error;
+}
 
-inline const byte* MemoryDataSource::getDataPtr() const
+inline const byte* FileDataSource::getDataPtr() const
 {
     return d_bytes;
 }
 
-inline size_t MemoryDataSource::getSize() const
+inline size_t FileDataSource::getSize() const
 {
     return d_size;
 }
-    
+
 } // End of section namespace SILLY
 

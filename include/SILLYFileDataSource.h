@@ -1,9 +1,9 @@
 /***********************************************************************
-    filename:   SILLYMemoryDataSource.h
-    created:    10 Jun 2006
-    author:     Olivier Delannoy 
+    filename:   SILLYFileDataSource.h
+    created:    20 Jul 2006
+    author:     Olivier Delannoy
 
-    purpose:    SILLYMemoryDataSource declaration for the SILLY library 
+    purpose:    Provide file based image loading 
 *************************************************************************/
 /***************************************************************************
  *   Copyright (C) 2004 - 2006 Paul D Turner & The CEGUI Development Team
@@ -27,8 +27,8 @@
  *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  *   OTHER DEALINGS IN THE SOFTWARE.
  ***************************************************************************/
-#ifndef _SILLYMemoryDataSource_h_ 
-#define _SILLYMemoryDataSource_h_
+#ifndef _SILLYFileDataSource_h_ 
+#define _SILLYFileDataSource_h_
 #include "SILLYBase.h" 
 #include "SILLYDataSource.h" 
 // Start of section namespace SILLY 
@@ -36,39 +36,48 @@ namespace SILLY
 {
 
 /*! 
-  \brief 
-  Load an image from a memory area.
-  
-  This class provides the services required to load an image from a
-  byte array. The object does not change the memory area and does no
-  take owner chip of the data.
- 
+  \brief
+    This class allow the loading of an image directly from a file
+
+    This class provides the services required to load an from a file.
+    The loading is done once at initialization. We wanted to avoid
+    exception. This is why user must check whether the object is valid
+    or not after creation. 
 */
   
-class SILLY_EXPORT MemoryDataSource : public DataSource 
+class SILLY_EXPORT FileDataSource : public DataSource
 {
 public:
     /*!
-      \brief
-      Create a data source from an existing memory area.
-
-      The MemoryDataSource does not take the ownership of the memory 
-      pointed by data. 
-
-      \param data a byte array of size \em size 
+      \brief 
+      Create a data source from an existing file.
       
-      \param size the size of data 
+      The FileDataSource manage the loading and the caching of the raw image source.
+      The object manage the life time of the data. 
+      
+      \param filename the name of the file containing the data 
     */
+    FileDataSource(const char* filename);
+    /*!
+      \brief destructor 
+    */
+    ~FileDataSource();
+    /*!
+      \brief Check wether the loading is successfull or not 
       
-    MemoryDataSource(const byte* data, size_t size);
+      One must call this function after creating this object in order
+      to be sure the loading was successfull.
 
+      \return true if the loading is successfull.
+    */
+    bool isValid() const;
 
     const byte* getDataPtr() const;
-
     size_t getSize() const;
 private:
-    const byte* d_bytes;               //!< a pointer to the byte array
-    size_t d_size;              //!< the size of the memory area
+    bool d_error;  //!< Store wether the loading was successfull or not
+    byte* d_bytes; //!< Store a pointer to the byte array storing the data 
+    size_t d_size; //!< number of bytes
 };
   
   
@@ -76,7 +85,7 @@ private:
 
 // Inclue inline function when needed 
 #ifdef SILLY_OPT_INLINE
-#include "SILLYMemoryDataSource.icpp"
+#include "SILLYFileDataSource.icpp"
 #endif 
 
-#endif // end of guard _SILLYMemoryDataSource_h_
+#endif // end of guard _SILLYFileDataSource_h_

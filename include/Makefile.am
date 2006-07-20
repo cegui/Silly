@@ -5,12 +5,14 @@ pkginc_HEADERS = \
   SILLYOptions.h \
   SILLYBase.h \
   SILLYDataSource.h \
+  SILLYFileDataSource.h \
   SILLYMemoryDataSource.h \
   SILLYImageContext.h \
   SILLYImageLoader.h \
   SILLYImageLoaderManager.h \
   SILLYImage.h \
   SILLYDataSource.icpp \
+  SILLYFileDataSource.icpp \
   SILLYMemoryDataSource.icpp \
   SILLYImageContext.icpp \
   SILLYImageLoader.icpp \

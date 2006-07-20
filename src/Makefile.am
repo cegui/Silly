@@ -6,6 +6,7 @@ libSILLY_la_LIBADD=
 libSILLY_la_LDFLAGS= -version-info @SILLY_VERSION_INFO@
 libSILLY_la_SOURCES= \
   SILLYDataSource.cpp \
+  SILLYFileDataSource.cpp \
   SILLYMemoryDataSource.cpp \
   SILLYImageLoader.cpp \
   SILLYImageLoaderManager.cpp \

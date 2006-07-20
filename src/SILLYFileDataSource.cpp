@@ -1,9 +1,9 @@
 /***********************************************************************
-    Filename:   SILLYMemoryDataSource.icpp 
-    created:    10 Jun 2006
-    author:     Olivier Delannoy
+    filename:   SILLYFileDataSource.cpp
+    created:    20 Jul 2006
+    author:     Olivier Delannoy 
 
-    purpose:    Inline function definition for MemoryDataSource class  
+    purpose:    Implementation of the FileDataSource methods  
 *************************************************************************/
 /***************************************************************************
  *   Copyright (C) 2004 - 2006 Paul D Turner & The CEGUI Development Team
@@ -27,20 +27,66 @@
  *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  *   OTHER DEALINGS IN THE SOFTWARE.
  ***************************************************************************/
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-// Start of section namespace SILLY
+#include "SILLYFileDataSource.h"
+
+#ifndef SILLY_OPT_INLINE
+#define inline 
+#include "SILLYFileDataSource.icpp"
+#undef inline
+#endif 
+#include <stdio.h> 
+// Start section of namespace SILLY
 namespace SILLY
 {
 
-inline const byte* MemoryDataSource::getDataPtr() const
+FileDataSource::FileDataSource(const char* filename)
+    : d_error(true), d_bytes(0), d_size(0)
 {
-    return d_bytes;
+    FILE* data = fopen(filename, "rb");
+    if (data)
+    {
+        long status = fseek(data, 0, SEEK_END);
+        if (status == -1)
+        {
+            fclose(data);
+            return;
+        }
+        status  = ftell(data);
+        if (status == -1)
+        {
+            fclose(data);
+            return;
+        }
+        d_size = status;
+        if (d_size)
+            d_bytes = new byte[d_size];
+        if (! d_bytes)
+        {
+            fclose(data);
+            return;
+        }
+        rewind(data);
+        status = fread(reinterpret_cast<void*>(d_bytes), 1, d_size, data);
+        if (status != d_size)
+        {
+            delete [] d_bytes;
+            d_bytes = 0;
+            fclose(data);
+        }
+        fclose(data);
+        d_error = false;        
+    }
 }
 
-inline size_t MemoryDataSource::getSize() const
-{
-    return d_size;
-}
-    
-} // End of section namespace SILLY
 
+FileDataSource::~FileDataSource()
+{
+    delete [] d_bytes;
+}
+
+
+} // End section of namespace SILLY 
