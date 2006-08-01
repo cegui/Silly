@@ -157,13 +157,12 @@ AC_DEFUN([SILLY_PNG], [
     else 
         AC_MSG_NOTICE([Disable png image format loading])
     fi
-    AM_CONDITIONAL(SILLY_HAVE_PNG, test "x$silly_with_png" = "xyes")
     PNG_CFLAGS="$PNG_CFLAGS $ZLIB_CFLAGS"
     PNG_LIBS="$PNG_LIBS $ZLIB_LIBS" 
-    AC_SUBST(PNG_CFLAGS)
-    AC_SUBST(PNG_LIBS)
-    
   fi 
+  AM_CONDITIONAL(SILLY_HAVE_PNG, test "x$silly_with_png" = "xyes")
+  AC_SUBST(PNG_CFLAGS)
+  AC_SUBST(PNG_LIBS)
 ])
 
 AC_DEFUN([SILLY_PNG_SUM], [
