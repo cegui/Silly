@@ -73,7 +73,6 @@ TGAImageLoader::~TGAImageLoader()
 
 ImageContext* TGAImageLoader::loadHeader(PixelFormat& formatSource, DataSource* data)
 {
-    
     byte idLength = data->getDataPtr()[0];
     byte colorMapType = data->getDataPtr()[1];
     byte imageType = data->getDataPtr()[2];
@@ -103,10 +102,19 @@ ImageContext* TGAImageLoader::loadHeader(PixelFormat& formatSource, DataSource* 
     height = height << 8;
     height |= data->getDataPtr()[14];
 #endif 
-    depth = data->getDataPtr()[16] >> 3;    
-    // We support BGR, RGB and RGBA image at the moment 
-    if (depth < 2 || depth > 4) 
-    {   
+    depth = data->getDataPtr()[16] >> 3;
+    switch (depth)
+    {
+    case 2:
+        formatSource = PF_A1B5G5R5;
+        break;
+    case 3:
+        formatSource = PF_RGB;
+        break;
+    case 4:
+        formatSource = PF_RGBA;
+        break;
+    default:
         return 0;
     }
     description = (*data)[17];
