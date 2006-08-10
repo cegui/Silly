@@ -22,16 +22,17 @@ package.files = {
 package.includepaths = {
     "include",
     "include/loaders",
-    "../cegui_mk2/dependencies/include",
+    "dependencies/include",
 }
 
 package.libpaths = {
-    "../cegui_mk2/dependencies/lib",
+    "dependencies/lib",
 }
 
 -- windows stuff
 package.defines = {
     "WIN32","_WIN32", "__WIN32__",
+    "_CRT_SECURE_NO_DEPRECATE",
     "SILLY_EXPORTS",
     "SILLY_HAVE_JPG",
     "SILLY_HAVE_PNG",

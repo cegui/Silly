@@ -105,7 +105,7 @@ ImageContext* TGAImageLoader::loadHeader(PixelFormat& formatSource, DataSource* 
 #endif 
     depth = data->getDataPtr()[16] >> 3;    
     // We support BGR, RGB and RGBA image at the moment 
-    if (depth < 2 && depth > 4) 
+    if (depth < 2 || depth > 4) 
     {   
         return 0;
     }
