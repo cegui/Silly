@@ -151,21 +151,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 5B5A48020A8CC61D00474A77 /* z */;
+			remoteGlobalIDString = 5B5A48020A8CC61D00474A77;
 			remoteInfo = z;
 		};
 		5B5A48080A8CC67200474A77 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 5B5A47940A8CC22700474A77 /* jpeg */;
+			remoteGlobalIDString = 5B5A47940A8CC22700474A77;
 			remoteInfo = jpeg;
 		};
 		5B5A480A0A8CC67200474A77 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 5B5A47F90A8CC5D000474A77 /* png */;
+			remoteGlobalIDString = 5B5A47F90A8CC5D000474A77;
 			remoteInfo = png;
 		};
 /* End PBXContainerItemProxy section */
@@ -1042,6 +1042,7 @@
 					ppc,
 					i386,
 				);
+				CURRENT_PROJECT_VERSION = 0.1.0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
@@ -1056,6 +1057,7 @@
 					ppc,
 					i386,
 				);
+				CURRENT_PROJECT_VERSION = 0.1.0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
