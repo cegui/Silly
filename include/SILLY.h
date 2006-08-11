@@ -52,7 +52,6 @@
    order to load an image one need to know only a few class : 
    SILLY::MemoryDataSource which is an adaptator around a memory area and 
    SILLY::Image 
-   
 
    \code 
    SILLY::SILLYInit(); // Init the library
@@ -63,6 +62,10 @@
 
    // Create the data source of the image 
    SILLY::MemoryDataSource mds(rawData, dataSize);
+
+   // You can also use a FileDataSource for the image : 
+   // SILLY::FileDataSource mds(filename);
+
    // Create the image object 
    SILLY::Image img(mds);
    // Load the image header 
