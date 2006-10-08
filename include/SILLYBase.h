@@ -32,7 +32,7 @@
 #include <cassert>
 #include <cstddef>
 
-#ifndef _MSC_VER
+#if !defined(_WIN32) && !defined(__WIN32__)
 #include "SILLYOptions.h"
 #endif
 
