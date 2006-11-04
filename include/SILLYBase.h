@@ -32,7 +32,7 @@
 #include <cassert>
 #include <cstddef>
 
-#if !defined(_WIN32) && !defined(__WIN32__)
+#if defined(USE_SILLYOPTIONS_H)
 #include "SILLYOptions.h"
 #endif
 

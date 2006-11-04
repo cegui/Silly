@@ -8,5 +8,5 @@ Name: SILLY
 Description: Simple Image Loading LibrarY for games and multi-media development.
 Version: @VERSION@
 Libs: -L${libdir} -lSILLY 
-Cflags: -I${includedir}/@PACKAGE@
+Cflags: -DUSE_SILLYOPTIONS_H -I${includedir}/@PACKAGE@
 
