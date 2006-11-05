@@ -54,6 +54,7 @@ AC_SUBST(SILLY_VERSION_INFO)
 AC_CONFIG_FILES([Makefile
 		 include/Makefile
 		 src/Makefile
+         SILLY.xcodeproj/Makefile
 		 SILLY.pc])
 AC_OUTPUT
 dnl summary 
