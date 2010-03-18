@@ -303,7 +303,7 @@ bool TGAImageLoader::loadImageData(PixelOrigin origin, DataSource* data, ImageCo
         }    
     }
     // Flip or not flip that is the question 
-    if ((tga->d_description & 0x10) == 0x10) // Upper Left origin 
+    if ((tga->d_description & 0x20) == 0x20) // Upper Left origin 
     {
         if  (origin == PO_BOTTOM_LEFT)
             return tga->flipVertically();
