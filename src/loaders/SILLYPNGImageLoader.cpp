@@ -64,10 +64,7 @@ void PNG_error_function(png_structp png_ptr,
                         png_const_charp error)
 {
     //  printf("PNG Error: %s\n", error);
-    // copied from libpng's pngerror.cpp
-    jmp_buf buf;
-    memcpy(buf, png_ptr->jmpbuf, sizeof(jmp_buf));
-    longjmp(buf, 1);
+    png_longjmp(png_ptr, 1);
 }
 
 
